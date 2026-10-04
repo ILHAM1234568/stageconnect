@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Connexion - StageConnect</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'stages/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <h1>StageConnect</h1>
+
+        <nav>
+            <a href="{% url 'home' %}">Accueil</a>
+            <a href="{% url 'register_student' %}">Créer un compte</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="offer-detail">
+
+            <h2>Se connecter</h2>
+
+            {% if error %}
+                <p>{{ error }}</p>
+            {% endif %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <label>Nom d'utilisateur :</label>
+
+                <br>
+
+                <input
+                    type="text"
+                    name="username"
+                    required
+                >
+
+                <br><br>
+
+                <label>Mot de passe :</label>
+
+                <br>
+
+                <input
+                    type="password"
+                    name="password"
+                    required
+                >
+
+                <br><br>
+
+                <button type="submit">
+                    Se connecter
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

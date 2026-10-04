@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mes candidatures - StageConnect</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'stages/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <h1>StageConnect</h1>
+
+        <nav>
+            <a href="{% url 'home' %}">Accueil</a>
+            <a href="#">Mon profil</a>
+            <a href="{% url 'my_applications' %}">Mes candidatures</a>
+            <a href="#">Déconnexion</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="offers-section">
+
+            <h2>Mes candidatures</h2>
+
+            {% if applications %}
+
+                <div class="offers-container">
+
+                    {% for application in applications %}
+
+                        <div class="offer-card">
+
+                            <h3>{{ application.stage_offer.title }}</h3>
+
+                            <p>
+                                🏢 {{ application.stage_offer.company.name }}
+                            </p>
+
+                            <p>
+                                📍 {{ application.stage_offer.location }}
+                            </p>
+
+                            <p>
+                                📅 {{ application.created_at|date:"d/m/Y H:i" }}
+                            </p>
+
+                            <p>
+                                Statut :
+
+                                {% if application.status == "pending" %}
+                                    🟡 En attente
+                                {% elif application.status == "accepted" %}
+                                    🟢 Acceptée
+                                {% elif application.status == "rejected" %}
+                                    🔴 Refusée
+                                {% endif %}
+
+                            </p>
+
+                            {% if application.message %}
+                                <p>
+                                    💬 {{ application.message }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-offers">
+                    <p>Vous n'avez aucune candidature pour le moment.</p>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

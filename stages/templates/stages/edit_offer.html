@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Modifier l'offre - StageConnect</title>
+
+    {% load static %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'stages/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+<header>
+
+    <h1>StageConnect</h1>
+
+    <nav>
+
+        <a href="{% url 'company_dashboard' %}">
+            Espace entreprise
+        </a>
+
+        <a href="{% url 'company_applications' %}">
+            Candidatures
+        </a>
+
+        <a href="{% url 'logout_student' %}">
+            Déconnexion
+        </a>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+    <section class="offer-detail">
+
+        <h2>
+            Modifier l'offre
+        </h2>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <p>
+
+                <label>
+                    Titre de l'offre
+                </label>
+
+                <input
+                    type="text"
+                    name="title"
+                    value="{{ offer.title }}"
+                    required
+                >
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    name="description"
+                    rows="6"
+                    required
+                >{{ offer.description }}</textarea>
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    Domaine
+                </label>
+
+                <input
+                    type="text"
+                    name="field"
+                    value="{{ offer.field }}"
+                    required
+                >
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    Localisation
+                </label>
+
+                <input
+                    type="text"
+                    name="location"
+                    value="{{ offer.location }}"
+                    required
+                >
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    Durée
+                </label>
+
+                <input
+                    type="text"
+                    name="duration"
+                    value="{{ offer.duration }}"
+                    required
+                >
+
+            </p>
+
+
+            <button type="submit">
+                💾 Enregistrer les modifications
+            </button>
+
+
+            <a href="{% url 'company_dashboard' %}">
+                Annuler
+            </a>
+
+        </form>
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Créer un compte entreprise - StageConnect</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'stages/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>StageConnect</h1>
+
+        <nav>
+
+            <a href="{% url 'home' %}">
+                Accueil
+            </a>
+
+            <a href="{% url 'login_student' %}">
+                Connexion
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <section class="offer-detail">
+
+            <h2>Créer un compte entreprise</h2>
+
+            {% if error %}
+                <p style="color: red;">
+                    {{ error }}
+                </p>
+            {% endif %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <label>Nom de l'entreprise :</label>
+                <br>
+
+                <input
+                    type="text"
+                    name="name"
+                    required
+                >
+
+                <br><br>
+
+
+                <label>Nom d'utilisateur :</label>
+                <br>
+
+                <input
+                    type="text"
+                    name="username"
+                    required
+                >
+
+                <br><br>
+
+
+                <label>Email :</label>
+                <br>
+
+                <input
+                    type="email"
+                    name="email"
+                    required
+                >
+
+                <br><br>
+
+
+                <label>Mot de passe :</label>
+                <br>
+
+                <input
+                    type="password"
+                    name="password"
+                    required
+                >
+
+                <br><br>
+
+
+                <label>Description :</label>
+                <br>
+
+                <textarea
+                    name="description"
+                    rows="5"
+                    cols="50"
+                ></textarea>
+
+                <br><br>
+
+
+                <label>Localisation :</label>
+                <br>
+
+                <input
+                    type="text"
+                    name="location"
+                    required
+                >
+
+                <br><br>
+
+
+                <button type="submit">
+                    Créer mon compte entreprise
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

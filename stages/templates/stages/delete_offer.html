@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% if edit_mode %}
+            Modifier mon entreprise - StageConnect
+        {% else %}
+            Profil entreprise - StageConnect
+        {% endif %}
+    </title>
+
+    {% load static %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'stages/style.css' %}"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+            font-size: 18px;
+        }
+
+        header {
+            background: white;
+            min-height: 85px;
+            padding: 18px 45px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #2563eb;
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #374151;
+            font-size: 17px;
+            font-weight: 700;
+            padding: 12px 16px;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        nav a:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        main {
+            width: 92%;
+            max-width: 1100px;
+            margin: 45px auto 70px;
+        }
+
+        .page-title {
+            margin-bottom: 30px;
+        }
+
+        .page-title h2 {
+            margin: 0 0 8px;
+            font-size: 38px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .page-title p {
+            margin: 0;
+            font-size: 19px;
+            color: #6b7280;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e5e7eb;
+        }
+
+        .profile-cover {
+            height: 190px;
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #7c3aed
+            );
+
+            position: relative;
+        }
+
+        .company-avatar {
+            width: 135px;
+            height: 135px;
+            border-radius: 50%;
+            background: white;
+
+            position: absolute;
+            left: 50%;
+            bottom: -67px;
+
+            transform: translateX(-50%);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 65px;
+
+            border: 6px solid white;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.18);
+        }
+
+        .profile-name {
+            text-align: center;
+            padding: 90px 30px 30px;
+        }
+
+        .profile-name h1 {
+            margin: 0 0 8px;
+            font-size: 35px;
+            color: #111827;
+        }
+
+        .profile-name p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 18px;
+        }
+
+        .information {
+            padding: 10px 40px 35px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+        .info-card {
+            background: #f8fafc;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            transition: 0.2s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 6px 18px rgba(0,0,0,0.06);
+
+            border-color: #bfdbfe;
+        }
+
+        .info-label {
+            font-size: 16px;
+            font-weight: 800;
+
+            color: #6b7280;
+
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-size: 21px;
+
+            font-weight: 700;
+
+            color: #111827;
+
+            word-break: break-word;
+        }
+
+        .description-card {
+            grid-column: 1 / -1;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eff6ff,
+                    #f5f3ff
+                );
+
+            border: 1px solid #bfdbfe;
+
+            border-radius: 18px;
+
+            padding: 28px;
+        }
+
+        .description-title {
+            font-size: 21px;
+            font-weight: 800;
+
+            color: #111827;
+
+            margin-bottom: 12px;
+        }
+
+        .description-text {
+            font-size: 18px;
+
+            line-height: 1.7;
+
+            color: #4b5563;
+
+            white-space: pre-line;
+        }
+
+        .edit-form {
+            padding: 10px 40px 40px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            color: #374151;
+
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+
+            width: 100%;
+
+            padding: 15px 16px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 12px;
+
+            background: #f9fafb;
+
+            font-size: 18px;
+
+            color: #111827;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        .form-group textarea {
+
+            min-height: 180px;
+
+            resize: vertical;
+
+            line-height: 1.6;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+
+            border-color: #2563eb;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(37,99,235,0.12);
+        }
+
+        .form-help {
+
+            margin-top: 7px;
+
+            font-size: 14px;
+
+            color: #6b7280;
+        }
+
+        .actions {
+
+            padding: 0 40px 40px;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+        .edit-button,
+        .save-button {
+
+            display: inline-block;
+
+            background: #2563eb;
+
+            color: white;
+
+            text-decoration: none;
+
+            border: none;
+
+            padding: 15px 28px;
+
+            border-radius: 11px;
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+        }
+
+        .edit-button:hover,
+        .save-button:hover {
+
+            background: #1d4ed8;
+        }
+
+        .dashboard-button {
+
+            display: inline-block;
+
+            background: #f3f4f6;
+
+            color: #374151;
+
+            text-decoration: none;
+
+            border: none;
+
+            padding: 15px 28px;
+
+            border-radius: 11px;
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+        }
+
+        .dashboard-button:hover {
+
+            background: #e5e7eb;
+        }
+
+        .messages {
+
+            margin-bottom: 25px;
+        }
+
+        .message {
+
+            padding: 15px 18px;
+
+            border-radius: 12px;
+
+            background: #eff6ff;
+
+            border: 1px solid #bfdbfe;
+
+            color: #1e40af;
+
+            font-weight: 700;
+        }
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #9ca3af;
+
+            font-size: 16px;
+        }
+
+        @media (max-width: 850px) {
+
+            header {
+
+                flex-direction: column;
+
+                gap: 15px;
+
+                padding: 18px 20px;
+            }
+
+            nav {
+
+                justify-content: center;
+            }
+
+            .information {
+
+                grid-template-columns: 1fr;
+
+                padding-left: 25px;
+
+                padding-right: 25px;
+            }
+
+            .description-card {
+
+                grid-column: auto;
+            }
+
+            .actions {
+
+                padding-left: 25px;
+
+                padding-right: 25px;
+            }
+
+            .edit-form {
+
+                padding-left: 25px;
+
+                padding-right: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            main {
+
+                width: 94%;
+
+                margin-top: 25px;
+            }
+
+            header h1 {
+
+                font-size: 28px;
+            }
+
+            nav {
+
+                flex-direction: column;
+
+                width: 100%;
+            }
+
+            nav a {
+
+                width: 100%;
+
+                text-align: center;
+            }
+
+            .page-title h2 {
+
+                font-size: 30px;
+            }
+
+            .profile-cover {
+
+                height: 150px;
+            }
+
+            .company-avatar {
+
+                width: 115px;
+
+                height: 115px;
+
+                bottom: -57px;
+
+                font-size: 55px;
+            }
+
+            .profile-name {
+
+                padding-top: 75px;
+            }
+
+            .profile-name h1 {
+
+                font-size: 28px;
+            }
+
+            .information {
+
+                padding-left: 20px;
+
+                padding-right: 20px;
+            }
+
+            .edit-form {
+
+                padding-left: 20px;
+
+                padding-right: 20px;
+            }
+
+            .actions {
+
+                flex-direction: column;
+
+                padding-left: 20px;
+
+                padding-right: 20px;
+            }
+
+            .edit-button,
+            .save-button,
+            .dashboard-button {
+
+                width: 100%;
+
+                text-align: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>
+        StageConnect
+    </h1>
+
+    <nav>
+
+        <a href="{% url 'company_dashboard' %}">
+            🏢 Espace entreprise
+        </a>
+
+        <a href="{% url 'company_profile' %}">
+            👤 Mon profil
+        </a>
+
+        <a href="{% url 'company_applications' %}">
+            📩 Candidatures
+        </a>
+
+        <a href="{% url 'notifications' %}">
+            🔔 Notifications
+
+            {% if unread_notifications %}
+                ({{ unread_notifications }})
+            {% endif %}
+
+        </a>
+
+        <a href="{% url 'logout_student' %}">
+            🚪 Déconnexion
+        </a>
+
+    </nav>
+
+</header>
+
+<main>
+
+    <div class="page-title">
+
+        {% if edit_mode %}
+
+            <h2>
+                ✏️ Modifier mon entreprise
+            </h2>
+
+            <p>
+                Modifiez les informations de votre entreprise.
+            </p>
+
+        {% else %}
+
+            <h2>
+                🏢 Profil entreprise
+            </h2>
+
+            <p>
+                Consultez les informations de votre entreprise.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    {% if messages %}
+
+        <div class="messages">
+
+            {% for message in messages %}
+
+                <div class="message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <section class="profile-card">
+
+        <div class="profile-cover">
+
+            <div class="company-avatar">
+                🏢
+            </div>
+
+        </div>
+
+
+        {% if edit_mode %}
+
+            <div class="profile-name">
+
+                <h1>
+                    ✏️ Modifier mon entreprise
+                </h1>
+
+                <p>
+                    Mettez à jour les informations de votre entreprise.
+                </p>
+
+            </div>
+
+
+            <form
+                method="POST"
+                class="edit-form"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="form-group">
+
+                    <label for="name">
+                        🏢 Nom de l'entreprise
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ company.name }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        📧 Email de l'entreprise
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ company.email }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="location">
+                        📍 Localisation
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        value="{{ company.location }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="description">
+                        📝 Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                    >{{ company.description }}</textarea>
+
+                    <div class="form-help">
+                        Présentez votre entreprise, ses activités et son domaine.
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        🔐 Nom d'utilisateur
+                    </label>
+
+                    <input
+                        type="text"
+                        value="{{ request.user.username }}"
+                        disabled
+                    >
+
+                    <div class="form-help">
+                        Le nom d'utilisateur ne peut pas être modifié ici.
+                    </div>
+
+                </div>
+
+
+                <div class="actions">
+
+                    <button
+                        type="submit"
+                        class="save-button"
+                    >
+                        💾 Enregistrer les modifications
+                    </button>
+
+                    <a
+                        href="{% url 'company_profile' %}"
+                        class="dashboard-button"
+                    >
+                        ❌ Annuler
+                    </a>
+
+                </div>
+
+            </form>
+
+        {% else %}
+
+
+            <div class="profile-name">
+
+                <h1>
+                    {{ company.name|default:"Entreprise" }}
+                </h1>
+
+                <p>
+                    Profil entreprise • StageConnect
+                </p>
+
+            </div>
+
+
+            <div class="information">
+
+                <div class="info-card">
+
+                    <div class="info-label">
+                        🏢 NOM DE L'ENTREPRISE
+                    </div>
+
+                    <div class="info-value">
+                        {{ company.name|default:"Non renseigné" }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <div class="info-label">
+                        📧 EMAIL
+                    </div>
+
+                    <div class="info-value">
+                        {{ company.email|default:"Non renseigné" }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <div class="info-label">
+                        📍 LOCALISATION
+                    </div>
+
+                    <div class="info-value">
+                        {{ company.location|default:"Non renseignée" }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <div class="info-label">
+                        🔐 NOM D'UTILISATEUR
+                    </div>
+
+                    <div class="info-value">
+                        {{ request.user.username }}
+                    </div>
+
+                </div>
+
+
+                <div class="description-card">
+
+                    <div class="description-title">
+                        📝 Présentation de l'entreprise
+                    </div>
+
+                    <div class="description-text">
+
+                        {% if company.description %}
+
+                            {{ company.description }}
+
+                        {% else %}
+
+                            Aucune description renseignée pour le moment.
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <a
+                    href="{% url 'company_profile' %}?edit=1"
+                    class="edit-button"
+                >
+                    ✏️ Modifier le profil
+                </a>
+
+                <a
+                    href="{% url 'company_dashboard' %}"
+                    class="dashboard-button"
+                >
+                    🏢 Retour à l'espace entreprise
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <div class="footer">
+
+        © 2026 StageConnect — Plateforme de stages
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

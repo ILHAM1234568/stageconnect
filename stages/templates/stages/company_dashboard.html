@@ -1,0 +1,958 @@
+```html
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Company Dashboard - StageConnect</title>
+
+    <link rel="stylesheet" href="{% static 'stages/style.css' %}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f6f7fb;
+            color: #222;
+        }
+
+        .dashboard-page {
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .dashboard-hero {
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
+
+            color: white;
+
+            padding: 45px 7% 85px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 45px;
+        }
+
+        .brand {
+            color: white;
+            text-decoration: none;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .notification-link {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -3px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .hero-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 30px;
+        }
+
+        .hero-text h1 {
+            margin: 0 0 10px;
+            font-size: 38px;
+            font-weight: 800;
+        }
+
+        .hero-text p {
+            margin: 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .hero-company {
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 17px 20px;
+            border-radius: 16px;
+            min-width: 230px;
+        }
+
+        .hero-company small {
+            display: block;
+            opacity: 0.75;
+            margin-bottom: 5px;
+        }
+
+        .hero-company strong {
+            font-size: 17px;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: -45px auto 0;
+            padding: 0 25px;
+            position: relative;
+        }
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 18px;
+            padding: 23px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
+
+        .purple {
+            background: #ede9fe;
+        }
+
+        .blue {
+            background: #dbeafe;
+        }
+
+        .orange {
+            background: #ffedd5;
+        }
+
+        .green {
+            background: #dcfce7;
+        }
+
+        .stat-card h2 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .stat-card p {
+            margin: 5px 0 0;
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* =========================
+           QUICK ACTIONS
+        ========================= */
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .quick-card {
+            background: white;
+            border-radius: 17px;
+            padding: 20px;
+            text-decoration: none;
+            color: #222;
+            box-shadow: 0 7px 23px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: 0.2s;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.09);
+        }
+
+        .quick-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 13px;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .quick-card strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .quick-card span {
+            color: #888;
+            font-size: 12px;
+        }
+
+        /* =========================
+           OFFERS
+        ========================= */
+
+        .offers-section {
+            background: white;
+            border-radius: 22px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .add-button {
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
+
+            color: white;
+            text-decoration: none;
+            padding: 11px 17px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .add-button:hover {
+            opacity: 0.92;
+        }
+
+        .offer-card {
+            border: 1px solid #e8e9ef;
+            border-radius: 16px;
+            padding: 21px;
+            margin-bottom: 15px;
+            transition: 0.2s;
+        }
+
+        .offer-card:hover {
+            box-shadow: 0 7px 22px rgba(0,0,0,0.06);
+        }
+
+        .offer-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .offer-title {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+
+        .offer-description {
+            color: #777;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .offer-date {
+            color: #999;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .offer-details {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+            margin-top: 17px;
+        }
+
+        .offer-tag {
+            background: #f3f4f8;
+            color: #555;
+            padding: 7px 11px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .offer-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 17px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .offer-action {
+            text-decoration: none;
+            padding: 8px 13px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .edit {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .applications {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .delete {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .delete-form {
+            display: inline;
+        }
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            margin: 0 0 8px;
+        }
+
+        .empty-state p {
+            color: #888;
+            margin: 0 0 22px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .dashboard-footer {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 35px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 950px) {
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-main {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .top-nav {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+            }
+
+            .hero-text h1 {
+                font-size: 30px;
+            }
+
+            .offers-section {
+                padding: 20px;
+            }
+
+            .section-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .offer-top {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard-page">
+
+
+    <!-- HERO -->
+
+    <section class="dashboard-hero">
+
+        <div class="hero-content">
+
+
+            <!-- NAV -->
+
+            <div class="top-nav">
+
+                <a
+                    href="{% url 'home' %}"
+                    class="brand"
+                >
+                    🚀 StageConnect
+                </a>
+
+
+                <div class="nav-links">
+
+                    <a href="{% url 'company_dashboard' %}">
+                        Dashboard
+                    </a>
+
+                    <a href="{% url 'company_applications' %}">
+                        Candidatures
+                    </a>
+
+                    <a href="{% url 'company_profile' %}">
+                        Mon profil
+                    </a>
+
+                    <a
+                        href="{% url 'notifications' %}"
+                        class="notification-link"
+                    >
+
+                        🔔
+
+                        {% if unread_notifications > 0 %}
+
+                            <span class="notification-badge">
+                                {{ unread_notifications }}
+                            </span>
+
+                        {% endif %}
+
+                    </a>
+
+                    <a href="{% url 'logout_student' %}">
+                        Déconnexion
+                    </a>
+
+                </div
+
+            </div>
+
+
+            <!-- HERO MAIN -->
+
+            <div class="hero-main">
+
+
+                <div class="hero-text">
+
+                    <h1>
+                        Bonjour, {{ company.name }} 👋
+                    </h1>
+
+                    <p>
+                        Gérez vos offres de stage et trouvez
+                        les meilleurs talents.
+                    </p>
+
+                </div>
+
+
+                <div class="hero-company">
+
+                    <small>
+                        Entreprise
+                    </small>
+
+                    <strong>
+                        🏢 {{ company.name }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN -->
+
+    <main class="dashboard-container">
+
+
+        <!-- STATS -->
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon purple">
+                        💼
+                    </div>
+
+                </div>
+
+                <h2>
+                    {{ total_offers }}
+                </h2>
+
+                <p>
+                    Offres publiées
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon blue">
+                        📋
+                    </div>
+
+                </div>
+
+                <h2>
+                    {{ total_applications }}
+                </h2>
+
+                <p>
+                    Candidatures reçues
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon orange">
+                        ⏳
+                    </div>
+
+                </div>
+
+                <h2>
+                    {{ pending_applications }}
+                </h2>
+
+                <p>
+                    En attente
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon green">
+                        ✓
+                    </div>
+
+                </div>
+
+                <h2>
+                    {{ accepted_applications }}
+                </h2>
+
+                <p>
+                    Candidatures acceptées
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="quick-actions">
+
+
+            <a
+                href="{% url 'add_offer' %}"
+                class="quick-card"
+            >
+
+                <div class="quick-icon">
+                    ➕
+                </div>
+
+                <div>
+
+                    <strong>
+                        Ajouter une offre
+                    </strong>
+
+                    <span>
+                        Publier un nouveau stage
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{% url 'company_applications' %}"
+                class="quick-card"
+            >
+
+                <div class="quick-icon">
+                    📋
+                </div>
+
+                <div>
+
+                    <strong>
+                        Voir les candidatures
+                    </strong>
+
+                    <span>
+                        Consulter les candidats
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{% url 'company_profile' %}"
+                class="quick-card"
+            >
+
+                <div class="quick-icon">
+                    👤
+                </div>
+
+                <div>
+
+                    <strong>
+                        Mon profil
+                    </strong>
+
+                    <span>
+                        Modifier les informations
+                    </span>
+
+                </div>
+
+            </a>
+
+
+        </div>
+
+
+        <!-- OFFERS -->
+
+        <section class="offers-section">
+
+
+            <div class="section-header">
+
+                <h2>
+                    💼 Mes offres
+                </h2>
+
+                <a
+                    href="{% url 'add_offer' %}"
+                    class="add-button"
+                >
+                    + Ajouter une offre
+                </a>
+
+            </div>
+
+
+            {% if offers %}
+
+
+                {% for offer in offers %}
+
+
+                    <article class="offer-card">
+
+
+                        <div class="offer-top">
+
+
+                            <div>
+
+                                <h3 class="offer-title">
+                                    {{ offer.title }}
+                                </h3>
+
+                                <p class="offer-description">
+
+                                    {{ offer.description|truncatechars:170 }}
+
+                                </p>
+
+                            </div>
+
+
+                            <div class="offer-date">
+
+                                {{ offer.created_at|date:"d/m/Y" }}
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="offer-details">
+
+                            <span class="offer-tag">
+                                📍 {{ offer.location }}
+                            </span>
+
+                            <span class="offer-tag">
+                                🎯 {{ offer.field }}
+                            </span>
+
+                            <span class="offer-tag">
+                                ⏱️ {{ offer.duration }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="offer-actions">
+
+
+                            <a
+                                href="{% url 'edit_offer' offer.id %}"
+                                class="offer-action edit"
+                            >
+                                ✏️ Modifier
+                            </a>
+
+
+                            <!-- CANDIDATURES DE CETTE OFFRE UNIQUEMENT -->
+
+                            <a
+                                href="{% url 'offer_applications' offer.id %}"
+                                class="offer-action applications"
+                            >
+                                📋 Candidatures
+                            </a>
+
+
+                            <form
+                                method="POST"
+                                action="{% url 'delete_offer' offer.id %}"
+                                class="delete-form"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="offer-action delete"
+                                    onclick="return confirm('Voulez-vous vraiment supprimer cette offre ?');"
+                                >
+                                    🗑️ Supprimer
+                                </button>
+
+                            </form>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <div class="empty-state">
+
+
+                    <div class="empty-state-icon">
+                        📭
+                    </div>
+
+
+                    <h3>
+                        Aucune offre publiée
+                    </h3>
+
+
+                    <p>
+                        Commencez par publier votre première
+                        offre de stage.
+                    </p>
+
+
+                    <a
+                        href="{% url 'add_offer' %}"
+                        class="add-button"
+                    >
+                        🚀 Créer ma première offre
+                    </a>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+        <div class="dashboard-footer">
+
+            StageConnect © 2026 — Plateforme de stages
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>
+```

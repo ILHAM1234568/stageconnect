@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% if edit_mode %}
+            Modifier mon profil - StageConnect
+        {% else %}
+            Mon profil - StageConnect
+        {% endif %}
+    </title>
+
+    {% load static %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'stages/style.css' %}"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+            font-size: 18px;
+        }
+
+        /* ================= HEADER ================= */
+
+        header {
+            background: white;
+            min-height: 85px;
+            padding: 18px 45px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #2563eb;
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #374151;
+
+            font-size: 17px;
+            font-weight: 700;
+
+            padding: 12px 16px;
+            border-radius: 10px;
+
+            transition: 0.2s;
+        }
+
+        nav a:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        /* ================= MAIN ================= */
+
+        main {
+            width: 92%;
+            max-width: 1100px;
+            margin: 45px auto 70px;
+        }
+
+        /* ================= TITLE ================= */
+
+        .page-title {
+            margin-bottom: 30px;
+        }
+
+        .page-title h2 {
+            margin: 0 0 8px;
+
+            font-size: 38px;
+            font-weight: 800;
+
+            color: #111827;
+        }
+
+        .page-title p {
+            margin: 0;
+
+            font-size: 19px;
+            color: #6b7280;
+        }
+
+        /* ================= PROFILE CARD ================= */
+
+        .profile-card {
+            background: white;
+
+            border-radius: 24px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 8px 30px rgba(0,0,0,0.08);
+
+            border: 1px solid #e5e7eb;
+        }
+
+        /* ================= COVER ================= */
+
+        .profile-cover {
+            height: 180px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #4f46e5
+                );
+
+            position: relative;
+        }
+
+        /* ================= AVATAR ================= */
+
+        .avatar {
+            width: 130px;
+            height: 130px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            position: absolute;
+
+            left: 50%;
+            bottom: -65px;
+
+            transform: translateX(-50%);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 65px;
+
+            border: 6px solid white;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.18);
+        }
+
+        /* ================= NAME ================= */
+
+        .profile-name {
+            text-align: center;
+
+            padding:
+                90px 30px 30px;
+        }
+
+        .profile-name h1 {
+            margin: 0 0 8px;
+
+            font-size: 35px;
+
+            color: #111827;
+        }
+
+        .profile-name p {
+            margin: 0;
+
+            color: #6b7280;
+
+            font-size: 18px;
+        }
+
+        /* ================= INFORMATION ================= */
+
+        .information {
+            padding: 10px 40px 35px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+        .info-card {
+            background: #f8fafc;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            transition: 0.2s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 6px 18px rgba(0,0,0,0.06);
+
+            border-color: #bfdbfe;
+        }
+
+        .info-label {
+            font-size: 16px;
+
+            font-weight: 800;
+
+            color: #6b7280;
+
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-size: 21px;
+
+            font-weight: 700;
+
+            color: #111827;
+
+            word-break: break-word;
+        }
+
+        /* ================= FORM ================= */
+
+        .edit-form {
+            padding: 10px 40px 40px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            color: #374151;
+
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+
+            padding: 15px 16px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 12px;
+
+            background: #f9fafb;
+
+            font-size: 18px;
+
+            color: #111827;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #2563eb;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px rgba(37,99,235,0.12);
+        }
+
+        .form-help {
+            margin-top: 7px;
+
+            font-size: 14px;
+
+            color: #6b7280;
+        }
+
+        /* ================= CV ================= */
+
+        .cv-card {
+            grid-column: 1 / -1;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eff6ff,
+                    #f5f3ff
+                );
+
+            border: 1px solid #bfdbfe;
+
+            border-radius: 18px;
+
+            padding: 28px;
+        }
+
+        .cv-title {
+            font-size: 21px;
+
+            font-weight: 800;
+
+            color: #111827;
+
+            margin-bottom: 12px;
+        }
+
+        .cv-text {
+            font-size: 18px;
+
+            color: #6b7280;
+
+            margin-bottom: 18px;
+        }
+
+        .cv-link {
+            display: inline-block;
+
+            background: #2563eb;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 13px 22px;
+
+            border-radius: 10px;
+
+            font-size: 17px;
+
+            font-weight: 800;
+        }
+
+        .cv-link:hover {
+            background: #1d4ed8;
+        }
+
+        .cv-input {
+            width: 100%;
+
+            padding: 13px;
+
+            background: white;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 10px;
+
+            font-size: 16px;
+        }
+
+        /* ================= ACTIONS ================= */
+
+        .actions {
+            padding: 0 40px 40px;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+        .edit-button,
+        .save-button {
+            display: inline-block;
+
+            background: #2563eb;
+
+            color: white;
+
+            text-decoration: none;
+
+            border: none;
+
+            padding: 15px 28px;
+
+            border-radius: 11px;
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+        }
+
+        .edit-button:hover,
+        .save-button:hover {
+            background: #1d4ed8;
+        }
+
+        .dashboard-button {
+            display: inline-block;
+
+            background: #f3f4f6;
+
+            color: #374151;
+
+            text-decoration: none;
+
+            border: none;
+
+            padding: 15px 28px;
+
+            border-radius: 11px;
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+        }
+
+        .dashboard-button:hover {
+            background: #e5e7eb;
+        }
+
+        /* ================= MESSAGE ================= */
+
+        .messages {
+            margin-bottom: 25px;
+        }
+
+        .message {
+            padding: 15px 18px;
+
+            border-radius: 12px;
+
+            background: #eff6ff;
+
+            border: 1px solid #bfdbfe;
+
+            color: #1e40af;
+
+            font-weight: 700;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer {
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #9ca3af;
+
+            font-size: 16px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 850px) {
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 18px 20px;
+            }
+
+            nav {
+                justify-content: center;
+            }
+
+            .information {
+                grid-template-columns: 1fr;
+
+                padding-left: 25px;
+                padding-right: 25px;
+            }
+
+            .cv-card {
+                grid-column: auto;
+            }
+
+            .actions {
+                padding-left: 25px;
+                padding-right: 25px;
+            }
+
+            .edit-form {
+                padding-left: 25px;
+                padding-right: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            main {
+                width: 94%;
+
+                margin-top: 25px;
+            }
+
+            header h1 {
+                font-size: 28px;
+            }
+
+            nav {
+                flex-direction: column;
+
+                width: 100%;
+            }
+
+            nav a {
+                width: 100%;
+
+                text-align: center;
+            }
+
+            .page-title h2 {
+                font-size: 30px;
+            }
+
+            .profile-cover {
+                height: 150px;
+            }
+
+            .avatar {
+                width: 115px;
+                height: 115px;
+
+                bottom: -57px;
+
+                font-size: 55px;
+            }
+
+            .profile-name {
+                padding-top: 75px;
+            }
+
+            .profile-name h1 {
+                font-size: 28px;
+            }
+
+            .information {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .edit-form {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .actions {
+                flex-direction: column;
+
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .edit-button,
+            .save-button,
+            .dashboard-button {
+                width: 100%;
+
+                text-align: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <h1>
+        StageConnect
+    </h1>
+
+    <nav>
+
+        <a href="{% url 'student_dashboard' %}">
+            🏠 Tableau de bord
+        </a>
+
+        <a href="{% url 'profile' %}">
+            👤 Mon profil
+        </a>
+
+        <a href="{% url 'my_applications' %}">
+            📩 Mes candidatures
+        </a>
+
+        <a href="{% url 'notifications' %}">
+            🔔 Notifications
+
+            {% if unread_notifications %}
+                ({{ unread_notifications }})
+            {% endif %}
+
+        </a>
+
+        <a href="{% url 'logout_student' %}">
+            🚪 Déconnexion
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main>
+
+    <!-- TITLE -->
+
+    <div class="page-title">
+
+        {% if edit_mode %}
+
+            <h2>
+                ✏️ Modifier mon profil
+            </h2>
+
+            <p>
+                Modifiez vos informations personnelles et votre CV.
+            </p>
+
+        {% else %}
+
+            <h2>
+                👤 Mon profil
+            </h2>
+
+            <p>
+                Consultez vos informations personnelles et votre CV.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- MESSAGES -->
+
+    {% if messages %}
+
+        <div class="messages">
+
+            {% for message in messages %}
+
+                <div class="message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- PROFILE CARD -->
+
+    <section class="profile-card">
+
+
+        <!-- COVER -->
+
+        <div class="profile-cover">
+
+            <div class="avatar">
+                🎓
+            </div>
+
+        </div>
+
+
+        {% if edit_mode %}
+
+        <!-- ================= EDIT MODE ================= -->
+
+        <div class="profile-name">
+
+            <h1>
+                ✏️ Modifier mon profil
+            </h1>
+
+            <p>
+                Mettez à jour vos informations.
+            </p>
+
+        </div>
+
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="edit-form"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- NOM -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    👤 Nom complet
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value="{{ student.name }}"
+                    required
+                >
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    📧 Adresse email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ student.email }}"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ECOLE -->
+
+            <div class="form-group">
+
+                <label for="school">
+                    🏫 Établissement
+                </label>
+
+                <input
+                    type="text"
+                    id="school"
+                    name="school"
+                    value="{{ student.school }}"
+                    required
+                >
+
+            </div>
+
+
+            <!-- FILIERE -->
+
+            <div class="form-group">
+
+                <label for="field">
+                    🎓 Filière
+                </label>
+
+                <input
+                    type="text"
+                    id="field"
+                    name="field"
+                    value="{{ student.field }}"
+                    required
+                >
+
+            </div>
+
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label>
+                    🔐 Nom d'utilisateur
+                </label>
+
+                <input
+                    type="text"
+                    value="{{ request.user.username }}"
+                    disabled
+                >
+
+                <div class="form-help">
+                    Le nom d'utilisateur ne peut pas être modifié ici.
+                </div>
+
+            </div>
+
+
+            <!-- CV -->
+
+            <div class="cv-card">
+
+                <div class="cv-title">
+                    📄 Mon CV
+                </div>
+
+                {% if student.cv %}
+
+                    <div class="cv-text">
+                        Votre CV actuel est disponible ici :
+                    </div>
+
+                    <a
+                        href="{{ student.cv.url }}"
+                        target="_blank"
+                        class="cv-link"
+                    >
+                        📄 Voir mon CV actuel
+                    </a>
+
+                    <br><br>
+
+                    <div class="cv-text">
+                        Vous pouvez sélectionner un nouveau CV pour remplacer l'ancien.
+                    </div>
+
+                {% else %}
+
+                    <div class="cv-text">
+                        Vous n'avez pas encore ajouté votre CV.
+                    </div>
+
+                {% endif %}
+
+
+                <input
+                    type="file"
+                    name="cv"
+                    class="cv-input"
+                    accept=".pdf,.doc,.docx"
+                >
+
+                <div class="form-help">
+                    Formats acceptés : PDF, DOC, DOCX — maximum 5 MB.
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="actions">
+
+                <button
+                    type="submit"
+                    class="save-button"
+                >
+                    💾 Enregistrer les modifications
+                </button>
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="dashboard-button"
+                >
+                    ❌ Annuler
+                </a>
+
+            </div>
+
+        </form>
+
+
+        {% else %}
+
+        <!-- ================= VIEW MODE ================= -->
+
+        <div class="profile-name">
+
+            <h1>
+                {{ student.name|default:"Étudiant" }}
+            </h1>
+
+            <p>
+                Profil étudiant • StageConnect
+            </p>
+
+        </div>
+
+
+        <!-- INFORMATION -->
+
+        <div class="information">
+
+
+            <!-- NOM -->
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    👤 NOM COMPLET
+                </div>
+
+                <div class="info-value">
+                    {{ student.name|default:"Non renseigné" }}
+                </div>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    📧 ADRESSE EMAIL
+                </div>
+
+                <div class="info-value">
+                    {{ student.email|default:"Non renseignée" }}
+                </div>
+
+            </div>
+
+
+            <!-- ECOLE -->
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    🏫 ÉTABLISSEMENT
+                </div>
+
+                <div class="info-value">
+                    {{ student.school|default:"Non renseigné" }}
+                </div>
+
+            </div>
+
+
+            <!-- FILIERE -->
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    🎓 FILIÈRE
+                </div>
+
+                <div class="info-value">
+                    {{ student.field|default:"Non renseignée" }}
+                </div>
+
+            </div>
+
+
+            <!-- USERNAME -->
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    🔐 NOM D'UTILISATEUR
+                </div>
+
+                <div class="info-value">
+                    {{ request.user.username }}
+                </div>
+
+            </div>
+
+
+            <!-- CV -->
+
+            <div class="cv-card">
+
+                <div class="cv-title">
+                    📄 Mon CV
+                </div>
+
+                {% if student.cv %}
+
+                    <div class="cv-text">
+                        Votre CV est disponible sur votre profil.
+                    </div>
+
+                    <a
+                        href="{{ student.cv.url }}"
+                        target="_blank"
+                        class="cv-link"
+                    >
+                        📄 Voir mon CV
+                    </a>
+
+                {% else %}
+
+                    <div class="cv-text">
+                        Vous n'avez pas encore ajouté votre CV.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="actions">
+
+            <a
+                href="{% url 'profile' %}?edit=1"
+                class="edit-button"
+            >
+                ✏️ Modifier le profil
+            </a>
+
+            <a
+                href="{% url 'student_dashboard' %}"
+                class="dashboard-button"
+            >
+                🏠 Retour au tableau de bord
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <div class="footer">
+        © 2026 StageConnect — Plateforme de stages
+    </div>
+
+</main>
+
+</body>
+
+</html>

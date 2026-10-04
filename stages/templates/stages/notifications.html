@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Notifications - StageConnect</title>
+
+    {% load static %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'stages/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+<header>
+
+    <h1>StageConnect</h1>
+
+    <nav>
+
+        {% if user.company %}
+
+            <a href="{% url 'company_dashboard' %}">
+                Espace entreprise
+            </a>
+
+            <a href="{% url 'profile' %}">
+                👤 Profil
+            </a>
+
+            <a href="{% url 'company_applications' %}">
+                Candidatures
+            </a>
+
+        {% else %}
+
+            <a href="{% url 'student_dashboard' %}">
+                Espace étudiant
+            </a>
+
+            <a href="{% url 'my_applications' %}">
+                Mes candidatures
+            </a>
+
+        {% endif %}
+
+        <a href="{% url 'notifications' %}">
+            🔔 Notifications
+        </a>
+
+        <a href="{% url 'logout_student' %}">
+            Déconnexion
+        </a>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+    <section class="offer-detail">
+
+        <h2>
+            🔔 Notifications
+        </h2>
+
+
+        {% if notifications %}
+
+            {% for notification in notifications %}
+
+                <article>
+
+                    <p>
+                        {{ notification.message }}
+                    </p>
+
+                    <small>
+                        {{ notification.created_at|date:"d/m/Y H:i" }}
+                    </small>
+
+                    {% if not notification.is_read %}
+
+                        <strong>
+                            Nouveau
+                        </strong>
+
+                    {% endif %}
+
+                </article>
+
+            {% endfor %}
+
+
+            <form
+                method="POST"
+                action="{% url 'mark_notifications_read' %}"
+            >
+
+                {% csrf_token %}
+
+                <button type="submit">
+                    ✓ Marquer toutes comme lues
+                </button>
+
+            </form>
+
+        {% else %}
+
+            <p>
+                Vous n'avez aucune notification.
+            </p>
+
+        {% endif %}
+
+
+        <br>
+
+
+        {% if user.company %}
+
+            <a href="{% url 'company_dashboard' %}">
+                ← Retour au dashboard
+            </a>
+
+        {% else %}
+
+            <a href="{% url 'student_dashboard' %}">
+                ← Retour au dashboard
+            </a>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

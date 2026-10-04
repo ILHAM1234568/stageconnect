@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Postuler - StageConnect</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'stages/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>StageConnect</h1>
+
+        <nav>
+            <a href="{% url 'home' %}">Accueil</a>
+            <a href="{% url 'profile' %}">Mon profil</a>
+            <a href="{% url 'my_applications' %}">Mes candidatures</a>
+            <a href="{% url 'logout_student' %}">Déconnexion</a>
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <section class="offer-detail">
+
+            <h2>Postuler à l'offre</h2>
+
+            <h3>{{ offer.title }}</h3>
+
+            <p>
+                <strong>Étudiant :</strong>
+                {{ student.name }}
+            </p>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <label for="message">
+                    Message de candidature :
+                </label>
+
+                <br><br>
+
+                <textarea
+                    id="message"
+                    name="message"
+                    rows="6"
+                    cols="50"
+                    placeholder="Écrivez votre message..."
+                ></textarea>
+
+                <br><br>
+
+                <button type="submit">
+                    Postuler
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Créer un compte - StageConnect</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'stages/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <h1>StageConnect</h1>
+
+        <nav>
+            <a href="{% url 'home' %}">Accueil</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="offer-detail">
+
+            <h2>Créer un compte étudiant</h2>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <label>Nom complet :</label>
+                <input
+                    type="text"
+                    name="name"
+                    required
+                >
+
+                <br><br>
+
+                <label>Nom d'utilisateur :</label>
+                <input
+                    type="text"
+                    name="username"
+                    required
+                >
+
+                <br><br>
+
+                <label>Email :</label>
+                <input
+                    type="email"
+                    name="email"
+                    required
+                >
+
+                <br><br>
+
+                <label>Mot de passe :</label>
+                <input
+                    type="password"
+                    name="password"
+                    required
+                >
+
+                <br><br>
+
+                <label>École :</label>
+                <input
+                    type="text"
+                    name="school"
+                    required
+                >
+
+                <br><br>
+
+                <label>Filière :</label>
+                <input
+                    type="text"
+                    name="field"
+                    required
+                >
+
+                <br><br>
+
+                <button type="submit">
+                    Créer mon compte
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

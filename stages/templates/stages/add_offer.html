@@ -1,0 +1,771 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ajouter une offre - StageConnect</title>
+
+    <link rel="stylesheet" href="{% static 'stages/style.css' %}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f6f7fb;
+            color: #222;
+        }
+
+        .add-offer-page {
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        /* HERO */
+
+        .offer-hero {
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
+
+            color: white;
+
+            padding: 55px 7% 100px;
+        }
+
+        .hero-content {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        .hero-content h1 {
+            margin: 0 0 12px;
+            font-size: 40px;
+            font-weight: 800;
+        }
+
+        .hero-content p {
+            margin: 0;
+            font-size: 17px;
+            opacity: 0.9;
+            max-width: 650px;
+            line-height: 1.6;
+        }
+
+        /* MAIN */
+
+        .offer-container {
+            max-width: 1100px;
+            margin: -55px auto 0;
+            padding: 0 25px;
+            position: relative;
+        }
+
+        .offer-layout {
+            display: grid;
+            grid-template-columns: 1fr 330px;
+            gap: 25px;
+            align-items: start;
+        }
+
+        /* FORM CARD */
+
+        .form-card {
+            background: white;
+            border-radius: 22px;
+            padding: 35px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        .form-header p {
+            margin: 0;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .form-section {
+            margin-bottom: 28px;
+        }
+
+        .form-section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .form-section-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-section-title h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .required {
+            color: #e63946;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            border: 1px solid #e1e3eb;
+            border-radius: 12px;
+            padding: 13px 15px;
+            font-size: 14px;
+            outline: none;
+            background: #fafbfe;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.10);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon span {
+            position: absolute;
+            left: 14px;
+            top: 13px;
+            z-index: 1;
+        }
+
+        .input-icon input {
+            padding-left: 42px;
+        }
+
+        /* BUTTONS */
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 14px 24px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
+
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102,126,234,0.30);
+        }
+
+        .btn-secondary {
+            background: #f1f2f6;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #e6e7ed;
+        }
+
+        /* SIDE CARD */
+
+        .side-card {
+            background: white;
+            border-radius: 22px;
+            padding: 25px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.07);
+            position: sticky;
+            top: 25px;
+        }
+
+        .side-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 18px;
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+
+            margin-bottom: 18px;
+        }
+
+        .side-card h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .side-card > p {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .tips {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .tip {
+            display: flex;
+            gap: 11px;
+            align-items: flex-start;
+        }
+
+        .tip-icon {
+            width: 30px;
+            height: 30px;
+            background: #eef2ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .tip p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* COMPANY */
+
+        .company-box {
+            margin-top: 20px;
+            background: #f8f9fc;
+            border-radius: 15px;
+            padding: 17px;
+        }
+
+        .company-label {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .company-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: #333;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 850px) {
+
+            .offer-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .side-card {
+                position: static;
+            }
+
+            .hero-content h1 {
+                font-size: 32px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .form-card {
+                padding: 23px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .offer-hero {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .offer-container {
+                padding: 0 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="add-offer-page">
+
+
+    <!-- HERO -->
+
+    <section class="offer-hero">
+
+        <div class="hero-content">
+
+            <a
+                href="{% url 'company_dashboard' %}"
+                class="back-link"
+            >
+                ← Retour au dashboard
+            </a>
+
+            <h1>
+                ✨ Créer une nouvelle offre
+            </h1>
+
+            <p>
+                Publiez une opportunité de stage et trouvez
+                les meilleurs talents pour votre entreprise.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN -->
+
+    <main class="offer-container">
+
+
+        <div class="offer-layout">
+
+
+            <!-- FORM -->
+
+            <div class="form-card">
+
+
+                <div class="form-header">
+
+                    <h2>
+                        Informations du stage
+                    </h2>
+
+                    <p>
+                        Remplissez les informations ci-dessous
+                        pour publier votre offre.
+                    </p>
+
+                </div>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <!-- BASIC INFO -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+
+                            <div class="form-section-icon">
+                                💼
+                            </div>
+
+                            <h3>
+                                Informations générales
+                            </h3>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Titre du stage
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                name="title"
+                                placeholder="Ex : Stage Développement Web Django"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Description
+                                <span class="required">*</span>
+                            </label>
+
+                            <textarea
+                                name="description"
+                                placeholder="Décrivez les missions, responsabilités et objectifs du stage..."
+                                required
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DETAILS -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+
+                            <div class="form-section-icon">
+                                📍
+                            </div>
+
+                            <h3>
+                                Détails du stage
+                            </h3>
+
+                        </div>
+
+
+                        <div class="form-row">
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Ville
+                                    <span class="required">*</span>
+                                </label>
+
+                                <div class="input-icon">
+
+                                    <span>
+                                        📍
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        placeholder="Ex : Oujda"
+                                        required
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Domaine
+                                    <span class="required">*</span>
+                                </label>
+
+                                <div class="input-icon">
+
+                                    <span>
+                                        🎯
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        name="field"
+                                        placeholder="Ex : Informatique"
+                                        required
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Durée du stage
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="input-icon">
+
+                                <span>
+                                    ⏱️
+                                </span>
+
+                                <input
+                                    type="text"
+                                    name="duration"
+                                    placeholder="Ex : 2 mois"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="form-actions">
+
+                        <a
+                            href="{% url 'company_dashboard' %}"
+                            class="btn btn-secondary"
+                        >
+                            Annuler
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            🚀 Publier l'offre
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+            <!-- SIDE -->
+
+            <aside class="side-card">
+
+
+                <div class="side-icon">
+                    💡
+                </div>
+
+
+                <h3>
+                    Conseils pour une bonne offre
+                </h3>
+
+
+                <p>
+                    Une offre claire et complète attire
+                    davantage de candidats qualifiés.
+                </p>
+
+
+                <div class="tips">
+
+
+                    <div class="tip">
+
+                        <div class="tip-icon">
+                            ✓
+                        </div>
+
+                        <p>
+                            Utilisez un titre précis et professionnel.
+                        </p>
+
+                    </div>
+
+
+                    <div class="tip">
+
+                        <div class="tip-icon">
+                            📝
+                        </div>
+
+                        <p>
+                            Décrivez clairement les missions
+                            du stagiaire.
+                        </p>
+
+                    </div>
+
+
+                    <div class="tip">
+
+                        <div class="tip-icon">
+                            🎯
+                        </div>
+
+                        <p>
+                            Indiquez le domaine et les compétences
+                            recherchées.
+                        </p>
+
+                    </div>
+
+
+                    <div class="tip">
+
+                        <div class="tip-icon">
+                            📍
+                        </div>
+
+                        <p>
+                            Précisez la ville où le stage
+                            sera effectué.
+                        </p>
+
+                    </div>
+
+
+                    <div class="tip">
+
+                        <div class="tip-icon">
+                            ⏱️
+                        </div>
+
+                        <p>
+                            Mentionnez clairement la durée
+                            du stage.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- COMPANY -->
+
+                <div class="company-box">
+
+                    <div class="company-label">
+                        Publication par
+                    </div>
+
+                    <div class="company-name">
+                        🏢 {{ company.name }}
+                    </div>
+
+                </div>
+
+
+            </aside>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>

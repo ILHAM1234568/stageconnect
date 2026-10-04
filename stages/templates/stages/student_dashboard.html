@@ -1,0 +1,646 @@
+```html
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Mon espace | StageConnect</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'stages/style.css' %}"
+    >
+
+</head>
+
+
+<body class="dashboard-home-style">
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="dashboard-navbar">
+
+    <div class="dashboard-container dashboard-navbar-inner">
+
+        <a
+            href="{% url 'home' %}"
+            class="dashboard-logo"
+        >
+            Stage<span>Connect</span>
+        </a>
+
+
+        <div class="dashboard-nav-links">
+
+            <a href="{% url 'home' %}">
+                Accueil
+            </a>
+
+            <a href="{% url 'my_applications' %}">
+                Mes candidatures
+            </a>
+
+            <a href="{% url 'profile' %}">
+                Mon profil
+            </a>
+
+            <a
+                href="{% url 'notifications' %}"
+                class="dashboard-notification"
+            >
+                🔔
+
+                {% if unread_count %}
+                    <span>
+                        {{ unread_count }}
+                    </span>
+                {% endif %}
+
+            </a>
+
+            <a
+                href="{% url 'logout_student' %}"
+                class="dashboard-logout"
+            >
+                Déconnexion
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="dashboard-hero">
+
+    <div class="dashboard-container dashboard-hero-inner">
+
+
+        <div class="dashboard-hero-content">
+
+            <div class="dashboard-badge">
+                🎓 ESPACE ÉTUDIANT
+            </div>
+
+
+            <h1>
+
+                Bonjour
+
+                {% if student %}
+                    {{ student.name }}
+                {% else %}
+                    {{ user.username }}
+                {% endif %}
+
+                👋
+
+            </h1>
+
+
+            <p>
+                Gérez vos candidatures, votre profil et
+                découvrez de nouvelles opportunités de stage.
+            </p>
+
+
+            <div class="dashboard-hero-buttons">
+
+                <a
+                    href="{% url 'home' %}"
+                    class="dashboard-main-button"
+                >
+                    🔎 Trouver un stage
+                </a>
+
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="dashboard-outline-button"
+                >
+                    Mon profil
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-hero-card">
+
+            <div class="dashboard-hero-card-icon">
+                🚀
+            </div>
+
+            <strong>
+                Votre prochaine opportunité
+            </strong>
+
+            <span>
+                commence sur StageConnect
+            </span>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="dashboard-main">
+
+    <div class="dashboard-container">
+
+
+        <!-- =================================================
+             WELCOME
+        ================================================== -->
+
+        <div class="dashboard-section-intro">
+
+            <div>
+
+                <span>
+                    VOTRE ACTIVITÉ
+                </span>
+
+                <h2>
+                    Vue d'ensemble
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             STATS
+        ================================================== -->
+
+        <div class="dashboard-stats">
+
+
+            <div class="dashboard-stat">
+
+                <div class="dashboard-stat-icon purple">
+                    📋
+                </div>
+
+                <div>
+
+                    <span>
+                        Candidatures
+                    </span>
+
+                    <strong>
+                        {{ applications_count }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-stat">
+
+                <div class="dashboard-stat-icon orange">
+                    ⏳
+                </div>
+
+                <div>
+
+                    <span>
+                        En attente
+                    </span>
+
+                    <strong>
+                        {{ pending_count }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-stat">
+
+                <div class="dashboard-stat-icon green">
+                    ✓
+                </div>
+
+                <div>
+
+                    <span>
+                        Acceptées
+                    </span>
+
+                    <strong>
+                        {{ accepted_count }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-stat">
+
+                <div class="dashboard-stat-icon red">
+                    ✕
+                </div>
+
+                <div>
+
+                    <span>
+                        Refusées
+                    </span>
+
+                    <strong>
+                        {{ rejected_count }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <div class="dashboard-content-grid">
+
+
+            <!-- =================================================
+                 APPLICATIONS
+            ================================================== -->
+
+            <section class="dashboard-applications">
+
+                <div class="dashboard-card-header">
+
+                    <div>
+
+                        <span>
+                            MES DEMANDES
+                        </span>
+
+                        <h2>
+                            Dernières candidatures
+                        </h2>
+
+                    </div>
+
+
+                    <a href="{% url 'my_applications' %}">
+                        Voir tout →
+                    </a>
+
+                </div>
+
+
+                {% if applications %}
+
+
+                    <div class="dashboard-application-list">
+
+
+                        {% for application in applications %}
+
+
+                            <div class="dashboard-application">
+
+
+                                <div class="dashboard-company-avatar">
+
+                                    {{ application.stage_offer.company.name|first|upper }}
+
+                                </div>
+
+
+                                <div class="dashboard-application-info">
+
+                                    <h3>
+                                        {{ application.stage_offer.title }}
+                                    </h3>
+
+                                    <p>
+                                        {{ application.stage_offer.company.name }}
+                                    </p>
+
+                                    <div>
+
+                                        <span>
+                                            📍 {{ application.stage_offer.location }}
+                                        </span>
+
+                                        <span>
+                                            📅 {{ application.created_at|date:"d/m/Y" }}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="dashboard-status">
+
+                                    {% if application.status == "pending" %}
+
+                                        <span class="pending">
+                                            En attente
+                                        </span>
+
+                                    {% elif application.status == "accepted" %}
+
+                                        <span class="accepted">
+                                            Acceptée
+                                        </span>
+
+                                    {% elif application.status == "rejected" %}
+
+                                        <span class="rejected">
+                                            Refusée
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                            </div>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <div class="dashboard-empty">
+
+                        <div>
+                            📋
+                        </div>
+
+                        <h3>
+                            Aucune candidature
+                        </h3>
+
+                        <p>
+                            Commencez à chercher votre
+                            prochain stage.
+                        </p>
+
+                        <a href="{% url 'home' %}">
+                            Découvrir les offres
+                        </a>
+
+                    </div>
+
+
+                {% endif %}
+
+            </section>
+
+
+
+            <!-- =================================================
+                 SIDEBAR
+            ================================================== -->
+
+            <aside class="dashboard-sidebar">
+
+
+                <!-- PROFILE -->
+
+                <div class="dashboard-profile">
+
+                    <div class="dashboard-avatar">
+
+                        {% if student %}
+                            {{ student.name|first|upper }}
+                        {% else %}
+                            {{ user.username|first|upper }}
+                        {% endif %}
+
+                    </div>
+
+
+                    <h2>
+
+                        {% if student %}
+                            {{ student.name }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+
+                    </h2>
+
+
+                    {% if student %}
+
+                        <p>
+                            {{ student.field }}
+                        </p>
+
+                        <small>
+                            {{ student.school }}
+                        </small>
+
+                    {% else %}
+
+                        <p>
+                            Étudiant
+                        </p>
+
+                    {% endif %}
+
+
+                    <a href="{% url 'profile' %}">
+                        Voir mon profil
+                    </a>
+
+                </div>
+
+
+
+                <!-- QUICK LINKS -->
+
+                <div class="dashboard-links-card">
+
+                    <span class="dashboard-links-title">
+                        ACCÈS RAPIDE
+                    </span>
+
+                    <h2>
+                        Que souhaitez-vous faire ?
+                    </h2>
+
+
+                    <a
+                        href="{% url 'home' %}"
+                        class="dashboard-link"
+                    >
+
+                        <div class="dashboard-link-icon">
+                            🔎
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Rechercher un stage
+                            </strong>
+
+                            <span>
+                                Explorer les offres
+                            </span>
+
+                        </div>
+
+                        <b>
+                            →
+                        </b>
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'my_applications' %}"
+                        class="dashboard-link"
+                    >
+
+                        <div class="dashboard-link-icon">
+                            📋
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Mes candidatures
+                            </strong>
+
+                            <span>
+                                Suivre mes demandes
+                            </span>
+
+                        </div>
+
+                        <b>
+                            →
+                        </b>
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'profile' %}"
+                        class="dashboard-link"
+                    >
+
+                        <div class="dashboard-link-icon">
+                            👤
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Modifier mon profil
+                            </strong>
+
+                            <span>
+                                Mettre à jour mes informations
+                            </span>
+
+                        </div>
+
+                        <b>
+                            →
+                        </b>
+
+                    </a>
+
+                </div>
+
+
+            </aside>
+
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="dashboard-footer">
+
+    <div class="dashboard-container dashboard-footer-inner">
+
+        <div>
+
+            <a
+                href="{% url 'home' %}"
+                class="dashboard-footer-logo"
+            >
+                Stage<span>Connect</span>
+            </a>
+
+            <p>
+                Connecter les étudiants aux opportunités.
+            </p>
+
+        </div>
+
+
+        <span>
+            © 2026 StageConnect
+        </span>
+
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>
+```
