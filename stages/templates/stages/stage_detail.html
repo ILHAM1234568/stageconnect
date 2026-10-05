@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -17,9 +18,57 @@
         rel="stylesheet"
         href="{% static 'stages/style.css' %}"
     >
+
+    <style>
+        .stage-detail-company-name-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .stage-detail-company-name {
+            margin: 0;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 11px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #166534;
+            font-size: 12px;
+            font-weight: 700;
+            border: 1px solid #bbf7d0;
+        }
+
+        .verified-badge-icon {
+            font-size: 13px;
+        }
+
+        .company-verification-box {
+            margin-top: 18px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .company-verification-box span {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 
+
 <body class="stage-detail-page">
+
 
 <nav class="stage-detail-navbar">
 
@@ -32,11 +81,13 @@
             Stage<span>Connect</span>
         </a>
 
+
         <div class="stage-detail-nav-links">
 
             <a href="{% url 'home' %}">
                 Accueil
             </a>
+
 
             {% if user.is_authenticated %}
 
@@ -52,9 +103,11 @@
 
                 {% endif %}
 
+
                 <a href="{% url 'profile' %}">
                     Mon profil
                 </a>
+
 
                 <a href="{% url 'logout_student' %}">
                     Déconnexion
@@ -82,6 +135,7 @@
 </nav>
 
 
+
 <section class="stage-detail-hero">
 
     <div class="stage-detail-container">
@@ -93,11 +147,13 @@
             ← Retour aux offres
         </a>
 
+
         <div class="stage-detail-hero-content">
 
             <div class="stage-detail-company-avatar">
                 {{ offer.company.name|first|upper }}
             </div>
+
 
             <div class="stage-detail-hero-text">
 
@@ -105,13 +161,30 @@
                     {{ offer.field }}
                 </div>
 
+
                 <h1>
                     {{ offer.title }}
                 </h1>
 
-                <p class="stage-detail-company-name">
-                    {{ offer.company.name }}
-                </p>
+
+                <div class="stage-detail-company-name-wrapper">
+
+                    <p class="stage-detail-company-name">
+                        {{ offer.company.name }}
+                    </p>
+
+
+                    {% if offer.company.is_verified %}
+
+                        <span class="verified-badge">
+                            <span class="verified-badge-icon">✓</span>
+                            Entreprise vérifiée
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
 
                 <div class="stage-detail-hero-info">
 
@@ -119,9 +192,11 @@
                         📍 {{ offer.location }}
                     </span>
 
+
                     <span>
                         ⏱️ {{ offer.duration }}
                     </span>
+
 
                     <span>
                         📅 Publié le
@@ -137,6 +212,7 @@
     </div>
 
 </section>
+
 
 
 <main class="stage-detail-main">
@@ -171,6 +247,7 @@
 
                     </div>
 
+
                     <div class="stage-detail-description">
 
                         {{ offer.description|linebreaks }}
@@ -178,6 +255,7 @@
                     </div>
 
                 </section>
+
 
 
                 <section class="stage-detail-card">
@@ -205,6 +283,7 @@
 
                     <div class="stage-detail-info-grid">
 
+
                         <div class="stage-detail-info-item">
 
                             <div class="stage-detail-info-icon">
@@ -224,6 +303,7 @@
                             </div>
 
                         </div>
+
 
 
                         <div class="stage-detail-info-item">
@@ -247,6 +327,7 @@
                         </div>
 
 
+
                         <div class="stage-detail-info-item">
 
                             <div class="stage-detail-info-icon">
@@ -266,6 +347,7 @@
                             </div>
 
                         </div>
+
 
 
                         <div class="stage-detail-info-item">
@@ -288,9 +370,11 @@
 
                         </div>
 
+
                     </div>
 
                 </section>
+
 
 
                 <section class="stage-detail-card">
@@ -316,251 +400,25 @@
                     </div>
 
 
+
                     <div class="stage-detail-company-box">
 
                         <div class="stage-detail-company-big-avatar">
                             {{ offer.company.name|first|upper }}
                         </div>
 
+
                         <div>
 
-                            <h3>
-                                {{ offer.company.name }}
-                            </h3>
+                            <div class="stage-detail-company-name-wrapper">
 
-                            {% if offer.company.location %}
+                                <h3>
+                                    {{ offer.company.name }}
+                                </h3>
 
-                                <p>
-                                    📍 {{ offer.company.location }}
-                                </p>
 
-                            {% endif %}
+                                {% if offer.company.is_verified %}
 
-                        </div>
+                                    <span class="verified-badge">
+                                        <span class="verified-bad
 
-                    </div>
-
-
-                    {% if offer.company.description %}
-
-                        <div class="stage-detail-company-description">
-
-                            {{ offer.company.description|linebreaks }}
-
-                        </div>
-
-                    {% endif %}
-
-                </section>
-
-            </div>
-
-
-            <aside class="stage-detail-sidebar">
-
-
-                <div class="stage-detail-apply-card">
-
-                    <div class="stage-detail-apply-top">
-
-                        <span>
-                            OPPORTUNITÉ
-                        </span>
-
-                        <div class="stage-detail-apply-icon">
-                            🚀
-                        </div>
-
-                    </div>
-
-
-                    <h2>
-                        Intéressé par ce stage ?
-                    </h2>
-
-                    <p>
-                        Envoyez votre candidature
-                        directement à l'entreprise.
-                    </p>
-
-
-                    {% if user.is_authenticated %}
-
-                        {% if student %}
-
-                            {% if already_applied %}
-
-                                <div class="stage-detail-login-message">
-
-                                    ✅ Vous avez déjà candidaté à cette offre.
-
-                                </div>
-
-                            {% else %}
-
-                                <form
-                                    method="POST"
-                                    action="{% url 'apply_stage' offer.id %}"
-                                >
-
-                                    {% csrf_token %}
-
-                                    <button
-                                        type="submit"
-                                        class="stage-detail-apply-button"
-                                    >
-                                        Postuler maintenant
-                                        <span>→</span>
-                                    </button>
-
-                                </form>
-
-                            {% endif %}
-
-                        {% else %}
-
-                            <div class="stage-detail-login-message">
-
-                                Connectez-vous avec un
-                                compte étudiant pour postuler.
-
-                            </div>
-
-                        {% endif %}
-
-                    {% else %}
-
-                        <a
-                            href="{% url 'login_student' %}"
-                            class="stage-detail-apply-button"
-                        >
-                            Se connecter pour postuler
-                            <span>→</span>
-                        </a>
-
-                    {% endif %}
-
-                </div>
-
-
-                <div class="stage-detail-side-card">
-
-                    <span class="stage-detail-side-label">
-                        EN BREF
-                    </span>
-
-                    <div class="stage-detail-side-row">
-
-                        <span>
-                            Domaine
-                        </span>
-
-                        <strong>
-                            {{ offer.field }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="stage-detail-side-row">
-
-                        <span>
-                            Ville
-                        </span>
-
-                        <strong>
-                            {{ offer.location }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="stage-detail-side-row">
-
-                        <span>
-                            Durée
-                        </span>
-
-                        <strong>
-                            {{ offer.duration }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="stage-detail-side-row">
-
-                        <span>
-                            Entreprise
-                        </span>
-
-                        <strong>
-                            {{ offer.company.name }}
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="stage-detail-trust-card">
-
-                    <div>
-                        🛡️
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            StageConnect
-                        </strong>
-
-                        <p>
-                            Une plateforme qui connecte
-                            les étudiants aux entreprises.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </aside>
-
-        </div>
-
-    </div>
-
-</main>
-
-
-<footer class="stage-detail-footer">
-
-    <div class="stage-detail-container stage-detail-footer-inner">
-
-        <div>
-
-            <a
-                href="{% url 'home' %}"
-                class="stage-detail-footer-logo"
-            >
-                Stage<span>Connect</span>
-            </a>
-
-            <p>
-                Connecter les étudiants aux opportunités.
-            </p>
-
-        </div>
-
-        <span>
-            © 2026 StageConnect
-        </span>
-
-    </div>
-
-</footer>
-
-
-</body>
-
-</html>

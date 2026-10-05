@@ -28,8 +28,18 @@ urlpatterns = [
         name="login_student"
     ),
 
+    # =========================
+    # REGISTER
+    # =========================
+
     path(
         "register/",
+        views.register_choice,
+        name="register"
+    ),
+
+    path(
+        "register/student/",
         views.register_student,
         name="register_student"
     ),
@@ -40,11 +50,19 @@ urlpatterns = [
         name="register_company"
     ),
 
+    # =========================
+    # LOGOUT
+    # =========================
+
     path(
         "logout/",
         views.logout_student,
         name="logout_student"
     ),
+
+    # =========================
+    # STUDENT
+    # =========================
 
     path(
         "dashboard/",
@@ -63,6 +81,10 @@ urlpatterns = [
         views.my_applications,
         name="my_applications"
     ),
+
+    # =========================
+    # COMPANY
+    # =========================
 
     path(
         "company-dashboard/",
@@ -106,6 +128,10 @@ urlpatterns = [
         name="delete_offer"
     ),
 
+    # =========================
+    # NOTIFICATIONS
+    # =========================
+
     path(
         "notifications/",
         views.notifications,
@@ -117,6 +143,10 @@ urlpatterns = [
         views.mark_notifications_read,
         name="mark_notifications_read"
     ),
+
+    # =========================
+    # COMPANY PROFILE
+    # =========================
 
     path(
         "company-profile/",

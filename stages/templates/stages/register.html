@@ -1,99 +1,619 @@
+{% load static %}
+
 <!DOCTYPE html>
+
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Créer un compte - StageConnect</title>
+```
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'stages/style.css' %}">
+<title>Créer un compte étudiant - StageConnect</title>
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+
+        background:
+            radial-gradient(circle at 10% 15%, rgba(37, 99, 235, 0.13), transparent 30%),
+            radial-gradient(circle at 90% 85%, rgba(79, 70, 229, 0.10), transparent 30%),
+            linear-gradient(135deg, #f8fbff, #eef4ff);
+
+        color: #1f2937;
+    }
+
+    /* ================= NAVBAR ================= */
+
+    .navbar {
+        height: 75px;
+
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0 50px;
+
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+
+        animation: navbarDown 0.7s ease;
+    }
+
+    .logo {
+        text-decoration: none;
+
+        font-size: 26px;
+        font-weight: 800;
+
+        background: linear-gradient(90deg, #2563eb, #4f46e5);
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .back-link {
+        text-decoration: none;
+
+        color: #475569;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        padding: 10px 17px;
+
+        border-radius: 10px;
+
+        transition: 0.25s;
+    }
+
+    .back-link:hover {
+        background: #eff6ff;
+        color: #2563eb;
+        transform: translateX(-4px);
+    }
+
+
+    /* ================= PAGE ================= */
+
+    .page {
+        min-height: calc(100vh - 75px);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 45px 20px;
+    }
+
+    .register-box {
+        width: 100%;
+        max-width: 620px;
+
+        background: rgba(255, 255, 255, 0.96);
+
+        border-radius: 28px;
+
+        padding: 42px 48px;
+
+        box-shadow:
+            0 20px 55px rgba(15, 23, 42, 0.10);
+
+        border: 1px solid #e5e7eb;
+
+        animation: fadeUp 0.8s ease;
+    }
+
+
+    /* ================= HEADER ================= */
+
+    .form-header {
+        text-align: center;
+
+        margin-bottom: 30px;
+    }
+
+    .student-icon {
+        width: 82px;
+        height: 82px;
+
+        margin: 0 auto 18px;
+
+        border-radius: 24px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 42px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #dbeafe,
+                #eef2ff
+            );
+
+        box-shadow:
+            0 10px 25px rgba(37, 99, 235, 0.16);
+
+        animation: iconFloat 3s ease-in-out infinite;
+    }
+
+    .form-header h1 {
+        font-size: 32px;
+
+        color: #111827;
+
+        margin-bottom: 10px;
+    }
+
+    .form-header h1 span {
+        background: linear-gradient(
+            90deg,
+            #2563eb,
+            #4f46e5
+        );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .form-header p {
+        color: #64748b;
+
+        font-size: 14px;
+
+        line-height: 1.6;
+    }
+
+
+    /* ================= FORM ================= */
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: block;
+
+        margin-bottom: 8px;
+
+        color: #374151;
+
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+
+        left: 15px;
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        font-size: 18px;
+
+        opacity: 0.75;
+    }
+
+    .form-group input {
+        width: 100%;
+
+        height: 50px;
+
+        padding: 0 15px 0 45px;
+
+        border: 1px solid #dbe2ea;
+
+        border-radius: 12px;
+
+        background: #f8fafc;
+
+        color: #111827;
+
+        font-size: 14px;
+
+        outline: none;
+
+        transition: all 0.25s ease;
+    }
+
+    .form-group input:focus {
+        background: white;
+
+        border-color: #2563eb;
+
+        box-shadow:
+            0 0 0 4px rgba(37, 99, 235, 0.10);
+    }
+
+    .form-group input::placeholder {
+        color: #9ca3af;
+    }
+
+
+    /* ================= BUTTON ================= */
+
+    .submit-button {
+        width: 100%;
+
+        height: 53px;
+
+        margin-top: 8px;
+
+        border: none;
+
+        border-radius: 13px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #2563eb,
+                #4f46e5
+            );
+
+        color: white;
+
+        font-size: 15px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 9px 22px rgba(37, 99, 235, 0.25);
+
+        transition: all 0.3s ease;
+    }
+
+    .submit-button:hover {
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 13px 28px rgba(37, 99, 235, 0.32);
+    }
+
+    .submit-button:active {
+        transform: translateY(0);
+    }
+
+
+    /* ================= LOGIN ================= */
+
+    .login-text {
+        text-align: center;
+
+        margin-top: 22px;
+
+        color: #64748b;
+
+        font-size: 14px;
+    }
+
+    .login-text a {
+        color: #2563eb;
+
+        text-decoration: none;
+
+        font-weight: 700;
+    }
+
+    .login-text a:hover {
+        text-decoration: underline;
+    }
+
+
+    /* ================= ANIMATIONS ================= */
+
+    @keyframes fadeUp {
+
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+    @keyframes navbarDown {
+
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+    @keyframes iconFloat {
+
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-6px);
+        }
+
+    }
+
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 650px) {
+
+        .navbar {
+            padding: 0 20px;
+        }
+
+        .register-box {
+            padding: 35px 25px;
+        }
+
+        .form-header h1 {
+            font-size: 27px;
+        }
+
+    }
+
+</style>
+```
+
 </head>
 
 <body>
 
-    <header>
-        <h1>StageConnect</h1>
+```
+<!-- NAVBAR -->
 
-        <nav>
-            <a href="{% url 'home' %}">Accueil</a>
-        </nav>
-    </header>
+<nav class="navbar">
 
-    <main>
+    <a href="{% url 'home' %}" class="logo">
+        StageConnect
+    </a>
 
-        <section class="offer-detail">
+    <a href="{% url 'register' %}" class="back-link">
+        ← Retour
+    </a>
 
-            <h2>Créer un compte étudiant</h2>
+</nav>
 
-            <form method="POST">
 
-                {% csrf_token %}
+<!-- PAGE -->
 
-                <label>Nom complet :</label>
-                <input
-                    type="text"
-                    name="name"
-                    required
-                >
+<main class="page">
 
-                <br><br>
+    <div class="register-box">
 
-                <label>Nom d'utilisateur :</label>
-                <input
-                    type="text"
-                    name="username"
-                    required
-                >
 
-                <br><br>
+        <!-- HEADER -->
 
-                <label>Email :</label>
-                <input
-                    type="email"
-                    name="email"
-                    required
-                >
+        <div class="form-header">
 
-                <br><br>
+            <div class="student-icon">
+                👩‍🎓
+            </div>
 
-                <label>Mot de passe :</label>
-                <input
-                    type="password"
-                    name="password"
-                    required
-                >
+            <h1>
+                Créer un compte <span>étudiant</span>
+            </h1>
 
-                <br><br>
+            <p>
+                Rejoignez StageConnect et commencez
+                <br>
+                votre recherche de stage.
+            </p>
 
-                <label>École :</label>
-                <input
-                    type="text"
-                    name="school"
-                    required
-                >
+        </div>
 
-                <br><br>
 
-                <label>Filière :</label>
-                <input
-                    type="text"
-                    name="field"
-                    required
-                >
+        <!-- FORM -->
 
-                <br><br>
+        <form method="POST">
 
-                <button type="submit">
-                    Créer mon compte
-                </button>
+            {% csrf_token %}
 
-            </form>
 
-        </section>
+            <div class="form-group">
 
-    </main>
+                <label for="name">
+                    Nom complet
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        👤
+                    </span>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Ex : Ilham Samghani"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="username">
+                    Nom d'utilisateur
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        @
+                    </span>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Ex : ilham123"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        ✉️
+                    </span>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Ex : ilham@email.com"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Mot de passe
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        🔒
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Créer un mot de passe"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="school">
+                    École
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        🎓
+                    </span>
+
+                    <input
+                        type="text"
+                        id="school"
+                        name="school"
+                        placeholder="Ex : ENSA Oujda"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="field">
+                    Filière
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        📚
+                    </span>
+
+                    <input
+                        type="text"
+                        id="field"
+                        name="field"
+                        placeholder="Ex : Intelligence Artificielle"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-button"
+            >
+                Créer mon compte →
+            </button>
+
+
+        </form>
+
+
+        <p class="login-text">
+
+            Vous avez déjà un compte ?
+
+            <a href="{% url 'login_student' %}">
+                Se connecter
+            </a>
+
+        </p>
+
+
+    </div>
+
+</main>
+```
 
 </body>
 

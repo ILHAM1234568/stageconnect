@@ -1,677 +1,383 @@
 {% load static %}
 
 <!DOCTYPE html>
+
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>StageConnect</title>
 
-    <style>
+```
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f7fb;
+        color: #1f2937;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #1f2937;
-        }
+    .navbar {
+        background: white;
+        min-height: 70px;
+        padding: 0 6%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
 
-        /* =========================
-           NAVBAR
-        ========================= */
+    .logo {
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #374151;
+        padding: 10px 14px;
+        border-radius: 9px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .nav-links a:hover {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .login {
+        background: #2563eb;
+        color: white !important;
+    }
+
+    .register {
+        background: #10b981;
+        color: white !important;
+    }
+
+    .logout {
+        background: #ef4444;
+        color: white !important;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 35px auto;
+    }
+
+    .welcome {
+        background: linear-gradient(135deg, #2563eb, #4f46e5);
+        color: white;
+        padding: 45px;
+        border-radius: 20px;
+        margin-bottom: 25px;
+    }
+
+    .welcome h1 {
+        font-size: 32px;
+        margin-bottom: 12px;
+    }
+
+    .welcome p {
+        font-size: 16px;
+    }
+
+    .search-box {
+        background: white;
+        padding: 22px;
+        border-radius: 16px;
+        margin-bottom: 30px;
+    }
+
+    .search-box form {
+        display: flex;
+        gap: 10px;
+    }
+
+    .search-box input {
+        flex: 1;
+        padding: 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        font-size: 15px;
+    }
+
+    .search-box button {
+        padding: 14px 25px;
+        border: none;
+        border-radius: 10px;
+        background: #2563eb;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .section-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .offers {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+    }
+
+    .offer-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+    }
+
+    .offer-card h3 {
+        color: #2563eb;
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .offer-card p {
+        color: #6b7280;
+        line-height: 1.6;
+        margin-bottom: 10px;
+    }
+
+    .details {
+        margin-top: 15px;
+    }
+
+    .details strong {
+        color: #111827;
+    }
+
+    .view-button {
+        display: inline-block;
+        margin-top: 18px;
+        padding: 11px 17px;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        border-radius: 9px;
+        font-weight: bold;
+    }
+
+    .empty {
+        background: white;
+        padding: 40px;
+        text-align: center;
+        border-radius: 16px;
+        color: #6b7280;
+    }
+
+    @media (max-width: 800px) {
 
         .navbar {
-            width: 100%;
-            height: 75px;
-            background: white;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            padding: 0 45px;
-
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .logo {
-            font-size: 25px;
-            font-weight: bold;
-            color: #2563eb;
-            text-decoration: none;
+            padding: 15px 20px;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        .nav-links a {
-            text-decoration: none;
-            color: #374151;
-
-            padding: 11px 17px;
-
-            border-radius: 10px;
-
-            font-size: 14px;
-            font-weight: 600;
-
-            transition: 0.2s;
-        }
-
-        .nav-links a:hover {
-            background: #eff6ff;
-            color: #2563eb;
-        }
-
-        .logout {
-            background: #ef4444 !important;
-            color: white !important;
-        }
-
-        .logout:hover {
-            background: #dc2626 !important;
-        }
-
-        .login {
-            background: #2563eb;
-            color: white !important;
-        }
-
-        .login:hover {
-            background: #1d4ed8 !important;
-        }
-
-
-        /* =========================
-           MAIN
-        ========================= */
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 40px auto;
-        }
-
-
-        /* =========================
-           WELCOME
-        ========================= */
-
-        .welcome {
-            background: linear-gradient(135deg, #2563eb, #4f46e5);
-
-            color: white;
-
-            padding: 45px;
-
-            border-radius: 20px;
-
-            margin-bottom: 30px;
-
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.20);
-        }
-
-        .welcome h1 {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        .welcome p {
-            font-size: 16px;
-            opacity: 0.95;
-        }
-
-
-        /* =========================
-           SEARCH
-        ========================= */
-
-        .search-box {
-            background: white;
-
-            padding: 25px;
-
-            border-radius: 16px;
-
-            margin-bottom: 30px;
-
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+        .offers {
+            grid-template-columns: 1fr;
         }
 
         .search-box form {
-            display: flex;
-            gap: 10px;
+            flex-direction: column;
         }
 
-        .search-box input {
-            flex: 1;
-
-            padding: 14px 18px;
-
-            border: 1px solid #d1d5db;
-
-            border-radius: 10px;
-
-            font-size: 15px;
-
-            outline: none;
+        .welcome {
+            padding: 30px;
         }
 
-        .search-box input:focus {
-            border-color: #2563eb;
+        .welcome h1 {
+            font-size: 26px;
         }
+    }
+</style>
+```
 
-        .search-box button {
-            padding: 14px 25px;
-
-            border: none;
-
-            border-radius: 10px;
-
-            background: #2563eb;
-
-            color: white;
-
-            font-weight: bold;
-
-            cursor: pointer;
-        }
-
-        .search-box button:hover {
-            background: #1d4ed8;
-        }
-
-
-        /* =========================
-           STATISTICS
-        ========================= */
-
-        .section-title {
-            font-size: 22px;
-            font-weight: bold;
-
-            margin-bottom: 20px;
-        }
-
-        .stats {
-            display: grid;
-
-            grid-template-columns: repeat(4, 1fr);
-
-            gap: 18px;
-
-            margin-bottom: 35px;
-        }
-
-        .stat-card {
-            background: white;
-
-            padding: 25px;
-
-            border-radius: 16px;
-
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
-
-            text-align: center;
-        }
-
-        .stat-card h2 {
-            font-size: 30px;
-            color: #2563eb;
-
-            margin-bottom: 8px;
-        }
-
-        .stat-card p {
-            color: #6b7280;
-            font-size: 14px;
-        }
-
-
-        /* =========================
-           OFFERS
-        ========================= */
-
-        .offers {
-            display: grid;
-
-            grid-template-columns: repeat(3, 1fr);
-
-            gap: 22px;
-        }
-
-        .offer-card {
-            background: white;
-
-            border-radius: 18px;
-
-            padding: 25px;
-
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
-
-            transition: 0.2s;
-        }
-
-        .offer-card:hover {
-            transform: translateY(-4px);
-
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
-        }
-
-        .offer-card h3 {
-            color: #2563eb;
-
-            font-size: 20px;
-
-            margin-bottom: 15px;
-        }
-
-        .offer-info {
-            margin-bottom: 8px;
-
-            color: #4b5563;
-
-            font-size: 14px;
-        }
-
-        .offer-description {
-            margin-top: 15px;
-
-            color: #6b7280;
-
-            line-height: 1.6;
-
-            font-size: 14px;
-        }
-
-        .details-button {
-            display: inline-block;
-
-            margin-top: 20px;
-
-            padding: 11px 18px;
-
-            background: #2563eb;
-
-            color: white;
-
-            text-decoration: none;
-
-            border-radius: 9px;
-
-            font-weight: bold;
-
-            font-size: 14px;
-        }
-
-        .details-button:hover {
-            background: #1d4ed8;
-        }
-
-
-        /* =========================
-           EMPTY
-        ========================= */
-
-        .empty {
-            background: white;
-
-            padding: 40px;
-
-            border-radius: 16px;
-
-            text-align: center;
-
-            color: #6b7280;
-        }
-
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 900px) {
-
-            .navbar {
-                height: auto;
-
-                padding: 15px 20px;
-
-                flex-direction: column;
-
-                gap: 15px;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-
-                justify-content: center;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .offers {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-
-        @media (max-width: 600px) {
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .offers {
-                grid-template-columns: 1fr;
-            }
-
-            .search-box form {
-                flex-direction: column;
-            }
-
-            .welcome {
-                padding: 30px 20px;
-            }
-
-            .welcome h1 {
-                font-size: 25px;
-            }
-        }
-
-    </style>
 </head>
-
 
 <body>
 
+<nav class="navbar">
 
-    <!-- =========================
-         NAVBAR
-    ========================= -->
+```
+<a href="{% url 'home' %}" class="logo">
+    StageConnect
+</a>
 
-    <nav class="navbar">
+<div class="nav-links">
 
-        <a href="{% url 'home' %}" class="logo">
-            StageConnect
+    {% if user.is_authenticated %}
+
+        <a href="{% url 'home' %}">
+            Accueil
         </a>
 
+        <a href="{% url 'profile' %}">
+            Mon profil
+        </a>
 
-        <div class="nav-links">
+        <a href="{% url 'my_applications' %}">
+            Mes candidatures
+        </a>
 
-            <a href="{% url 'home' %}">
-                Accueil
-            </a>
+        <a href="{% url 'logout_student' %}" class="logout">
+            Déconnexion
+        </a>
 
+    {% else %}
 
-            {% if user.is_authenticated %}
+        <a href="{% url 'login_student' %}" class="login">
+            Connexion
+        </a>
 
-                <a href="{% url 'profile' %}">
-                    Mon profil
-                </a>
+        <a href="{% url 'register' %}" class="register">
+            Créer un compte
+        </a>
 
+    {% endif %}
 
-                <a href="{% url 'my_applications' %}">
-                    Mes candidatures
-                </a>
+</div>
+```
 
+</nav>
 
-                {% if user.company %}
+<main class="container">
 
-                    <a href="{% url 'add_offer' %}">
-                        Publications
-                    </a>
+```
+<section class="welcome">
 
-                {% endif %}
+    <h1>
+        Trouvez votre stage avec StageConnect 🚀
+    </h1>
 
+    <p>
+        Découvrez des opportunités de stage et trouvez
+        l'entreprise qui correspond à votre parcours.
+    </p>
 
-                <a href="{% url 'logout_student' %}" class="logout">
-                    Déconnexion
-                </a>
+</section>
 
 
-            {% else %}
+<section class="search-box">
 
-                <a href="{% url 'login_student' %}" class="login">
-                    Connexion
-                </a>
+    <form method="GET">
 
-            {% endif %}
+        <input
+            type="text"
+            name="search"
+            value="{{ search }}"
+            placeholder="Rechercher un stage, domaine ou ville..."
+        >
 
-        </div>
+        <button type="submit">
+            Rechercher
+        </button>
 
-    </nav>
+    </form>
 
+</section>
 
 
-    <!-- =========================
-         MAIN CONTENT
-    ========================= -->
+<h2 class="section-title">
+    Offres de stage
+</h2>
 
-    <main class="container">
 
+{% if offers %}
 
-        <!-- WELCOME -->
+    <div class="offers">
 
-        <section class="welcome">
+        {% for offer in offers %}
 
-            {% if user.is_authenticated %}
-
-                <h1>
-                    Bonjour {{ user.get_full_name|default:user.username }} 👋
-                </h1>
-
-                <p>
-                    Bienvenue sur votre espace StageConnect.
-                    Trouvez facilement votre prochain stage.
-                </p>
-
-            {% else %}
-
-                <h1>
-                    Trouvez votre prochain stage 🚀
-                </h1>
-
-                <p>
-                    Découvrez des offres de stage et trouvez
-                    l'opportunité qui vous correspond.
-                </p>
-
-            {% endif %}
-
-        </section>
-
-
-
-        <!-- SEARCH -->
-
-        <section class="search-box">
-
-            <form method="GET" action="{% url 'home' %}">
-
-                <input
-                    type="text"
-                    name="search"
-                    value="{{ search }}"
-                    placeholder="Rechercher un stage, domaine, ville..."
-                >
-
-                <button type="submit">
-                    Rechercher
-                </button>
-
-            </form>
-
-        </section>
-
-
-
-        <!-- STATISTICS -->
-
-        {% if user.is_authenticated and user.student %}
-
-            <h2 class="section-title">
-                Votre activité
-            </h2>
-
-
-            <section class="stats">
-
-                <div class="stat-card">
-
-                    <h2>
-                        {{ total_candidatures|default:"0" }}
-                    </h2>
-
-                    <p>
-                        Total candidatures
-                    </p>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <h2>
-                        {{ candidatures_en_attente|default:"0" }}
-                    </h2>
-
-                    <p>
-                        En attente
-                    </p>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <h2>
-                        {{ candidatures_acceptees|default:"0" }}
-                    </h2>
-
-                    <p>
-                        Acceptées
-                    </p>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <h2>
-                        {{ candidatures_refusees|default:"0" }}
-                    </h2>
-
-                    <p>
-                        Refusées
-                    </p>
-
-                </div>
-
-            </section>
-
-        {% endif %}
-
-
-
-        <!-- STAGE OFFERS -->
-
-        <h2 class="section-title">
-            Offres de stage disponibles
-        </h2>
-
-
-        {% if offers %}
-
-            <section class="offers">
-
-                {% for offer in offers %}
-
-                    <article class="offer-card">
-
-                        <h3>
-                            {{ offer.title }}
-                        </h3>
-
-
-                        <div class="offer-info">
-                            🏢
-                            {{ offer.company.name }}
-                        </div>
-
-
-                        <div class="offer-info">
-                            📍
-                            {{ offer.location }}
-                        </div>
-
-
-                        <div class="offer-info">
-                            🎓
-                            {{ offer.field }}
-                        </div>
-
-
-                        <div class="offer-info">
-                            ⏱️
-                            {{ offer.duration }}
-                        </div>
-
-
-                        <p class="offer-description">
-                            {{ offer.description|truncatewords:25 }}
-                        </p>
-
-
-                        <a
-                            href="{% url 'stage_detail' offer.id %}"
-                            class="details-button"
-                        >
-                            Voir les détails
-                        </a>
-
-                    </article>
-
-                {% endfor %}
-
-            </section>
-
-        {% else %}
-
-            <div class="empty">
+            <div class="offer-card">
 
                 <h3>
-                    Aucune offre trouvée
+                    {{ offer.title }}
                 </h3>
 
                 <p>
-                    Essayez une autre recherche.
+                    {{ offer.description }}
                 </p>
+
+                <div class="details">
+
+                    <p>
+                        <strong>Entreprise :</strong>
+                        {{ offer.company.name }}
+                    </p>
+
+                    <p>
+                        <strong>📍 Localisation :</strong>
+                        {{ offer.location }}
+                    </p>
+
+                    <p>
+                        <strong>🎓 Domaine :</strong>
+                        {{ offer.field }}
+                    </p>
+
+                    <p>
+                        <strong>⏱ Durée :</strong>
+                        {{ offer.duration }}
+                    </p>
+
+                </div>
+
+                <a
+                    href="{% url 'stage_detail' offer.id %}"
+                    class="view-button"
+                >
+                    Voir l'offre →
+                </a>
 
             </div>
 
-        {% endif %}
+        {% endfor %}
 
+    </div>
 
-    </main>
+{% else %}
 
+    <div class="empty">
+
+        <h3>
+            Aucune offre de stage disponible
+        </h3>
+
+        <p style="margin-top: 10px;">
+            Les nouvelles offres apparaîtront ici.
+        </p>
+
+    </div>
+
+{% endif %}
+```
+
+</main>
 
 </body>
-
 </html>

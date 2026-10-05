@@ -18,18 +18,11 @@ from .models import (
 # =========================================================
 
 def home(request):
+    search = request.GET.get("search", "").strip()
 
-    search = request.GET.get(
-        "search",
-        ""
-    ).strip()
-
-    offers = StageOffer.objects.all().order_by(
-        "-created_at"
-    )
+    offers = StageOffer.objects.all().order_by("-created_at")
 
     if search:
-
         offers = offers.filter(
             title__icontains=search
         ) | offers.filter(
@@ -45,7 +38,6 @@ def home(request):
     unread_notifications = 0
 
     if request.user.is_authenticated:
-
         unread_notifications = Notification.objects.filter(
             user=request.user,
             is_read=False
@@ -67,7 +59,6 @@ def home(request):
 # =========================================================
 
 def stage_detail(request, offer_id):
-
     offer = get_object_or_404(
         StageOffer,
         id=offer_id
@@ -77,9 +68,7 @@ def stage_detail(request, offer_id):
     already_applied = False
 
     if request.user.is_authenticated:
-
         try:
-
             student = Student.objects.get(
                 user=request.user
             )
@@ -109,28 +98,23 @@ def stage_detail(request, offer_id):
 
 @login_required(login_url="login_student")
 def apply_stage(request, offer_id):
-
     offer = get_object_or_404(
         StageOffer,
         id=offer_id
     )
 
     try:
-
         student = Student.objects.get(
             user=request.user
         )
 
     except Student.DoesNotExist:
-
         messages.error(
             request,
             "Vous devez avoir un profil étudiant."
         )
 
-        return redirect(
-            "profile"
-        )
+        return redirect("profile")
 
     if request.method == "POST":
 
@@ -145,7 +129,6 @@ def apply_stage(request, offer_id):
         ).first()
 
         if existing_application:
-
             messages.warning(
                 request,
                 "Vous avez déjà candidaté à cette offre."
@@ -164,7 +147,6 @@ def apply_stage(request, offer_id):
         )
 
         if offer.company.user:
-
             Notification.objects.create(
                 user=offer.company.user,
                 message=(
@@ -179,9 +161,7 @@ def apply_stage(request, offer_id):
             "Votre candidature a été envoyée avec succès."
         )
 
-        return redirect(
-            "my_applications"
-        )
+        return redirect("my_applications")
 
     return redirect(
         "stage_detail",
@@ -197,30 +177,24 @@ def apply_stage(request, offer_id):
 def my_applications(request):
 
     try:
-
         student = Student.objects.get(
             user=request.user
         )
 
     except Student.DoesNotExist:
-
         messages.error(
             request,
             "Profil étudiant introuvable."
         )
 
-        return redirect(
-            "profile"
-        )
+        return redirect("profile")
 
     applications = Application.objects.filter(
         student=student
     ).select_related(
         "stage_offer",
         "stage_offer__company"
-    ).order_by(
-        "-created_at"
-    )
+    ).order_by("-created_at")
 
     unread_notifications = Notification.objects.filter(
         user=request.user,
@@ -239,16 +213,28 @@ def my_applications(request):
 
 
 # =========================================================
+# REGISTER CHOICE
+# =========================================================
+
+def register_choice(request):
+
+    if request.user.is_authenticated:
+        return redirect("home")
+
+    return render(
+        request,
+        "stages/register_choice.html"
+    )
+
+
+# =========================================================
 # REGISTER STUDENT
 # =========================================================
 
 def register_student(request):
 
     if request.user.is_authenticated:
-
-        return redirect(
-            "student_dashboard"
-        )
+        return redirect("student_dashboard")
 
     if request.method == "POST":
 
@@ -289,9 +275,7 @@ def register_student(request):
                 "Le nom d'utilisateur et le mot de passe sont obligatoires."
             )
 
-            return redirect(
-                "register_student"
-            )
+            return redirect("register_student")
 
         if User.objects.filter(
             username=username
@@ -302,9 +286,7 @@ def register_student(request):
                 "Ce nom d'utilisateur existe déjà."
             )
 
-            return redirect(
-                "register_student"
-            )
+            return redirect("register_student")
 
         if Student.objects.filter(
             email=email
@@ -315,9 +297,7 @@ def register_student(request):
                 "Cet email est déjà utilisé."
             )
 
-            return redirect(
-                "register_student"
-            )
+            return redirect("register_student")
 
         user = User.objects.create_user(
             username=username,
@@ -342,9 +322,7 @@ def register_student(request):
             "Votre compte étudiant a été créé avec succès."
         )
 
-        return redirect(
-            "student_dashboard"
-        )
+        return redirect("student_dashboard")
 
     return render(
         request,
@@ -359,10 +337,7 @@ def register_student(request):
 def register_company(request):
 
     if request.user.is_authenticated:
-
-        return redirect(
-            "company_dashboard"
-        )
+        return redirect("company_dashboard")
 
     if request.method == "POST":
 
@@ -403,9 +378,7 @@ def register_company(request):
                 "Le nom d'utilisateur et le mot de passe sont obligatoires."
             )
 
-            return redirect(
-                "register_company"
-            )
+            return redirect("register_company")
 
         if User.objects.filter(
             username=username
@@ -416,9 +389,7 @@ def register_company(request):
                 "Ce nom d'utilisateur existe déjà."
             )
 
-            return redirect(
-                "register_company"
-            )
+            return redirect("register_company")
 
         if Company.objects.filter(
             email=email
@@ -429,9 +400,7 @@ def register_company(request):
                 "Cet email est déjà utilisé."
             )
 
-            return redirect(
-                "register_company"
-            )
+            return redirect("register_company")
 
         user = User.objects.create_user(
             username=username,
@@ -456,9 +425,7 @@ def register_company(request):
             "Votre compte entreprise a été créé avec succès."
         )
 
-        return redirect(
-            "company_dashboard"
-        )
+        return redirect("company_dashboard")
 
     return render(
         request,
@@ -475,26 +442,20 @@ def login_student(request):
     if request.user.is_authenticated:
 
         try:
-
             Student.objects.get(
                 user=request.user
             )
 
-            return redirect(
-                "student_dashboard"
-            )
+            return redirect("student_dashboard")
 
         except Student.DoesNotExist:
 
             try:
-
                 Company.objects.get(
                     user=request.user
                 )
 
-                return redirect(
-                    "company_dashboard"
-                )
+                return redirect("company_dashboard")
 
             except Company.DoesNotExist:
                 pass
@@ -525,34 +486,26 @@ def login_student(request):
             )
 
             try:
-
                 Student.objects.get(
                     user=user
                 )
 
-                return redirect(
-                    "student_dashboard"
-                )
+                return redirect("student_dashboard")
 
             except Student.DoesNotExist:
                 pass
 
             try:
-
                 Company.objects.get(
                     user=user
                 )
 
-                return redirect(
-                    "company_dashboard"
-                )
+                return redirect("company_dashboard")
 
             except Company.DoesNotExist:
                 pass
 
-            return redirect(
-                "home"
-            )
+            return redirect("home")
 
         messages.error(
             request,
@@ -572,18 +525,14 @@ def login_student(request):
 @login_required
 def logout_student(request):
 
-    logout(
-        request
-    )
+    logout(request)
 
     messages.success(
         request,
         "Vous êtes déconnecté."
     )
 
-    return redirect(
-        "home"
-    )
+    return redirect("home")
 
 
 # =========================================================
@@ -594,7 +543,6 @@ def logout_student(request):
 def profile(request):
 
     try:
-
         student = Student.objects.get(
             user=request.user
         )
@@ -605,18 +553,14 @@ def profile(request):
             user=request.user
         ).exists():
 
-            return redirect(
-                "company_dashboard"
-            )
+            return redirect("company_dashboard")
 
         messages.error(
             request,
             "Profil étudiant introuvable."
         )
 
-        return redirect(
-            "home"
-        )
+        return redirect("home")
 
     if request.method == "POST":
 
@@ -647,9 +591,7 @@ def profile(request):
                 "Veuillez remplir tous les champs obligatoires."
             )
 
-            return redirect(
-                "profile"
-            )
+            return redirect("profile")
 
         email_exists = Student.objects.filter(
             email=email
@@ -664,18 +606,14 @@ def profile(request):
                 "Cet email est déjà utilisé par un autre étudiant."
             )
 
-            return redirect(
-                "profile"
-            )
+            return redirect("profile")
 
         student.name = name
         student.email = email
         student.school = school
         student.field = field
 
-        cv_file = request.FILES.get(
-            "cv"
-        )
+        cv_file = request.FILES.get("cv")
 
         if cv_file:
 
@@ -699,9 +637,7 @@ def profile(request):
                     "Format CV non autorisé. Utilisez PDF, DOC ou DOCX."
                 )
 
-                return redirect(
-                    "profile"
-                )
+                return redirect("profile")
 
             max_size = 5 * 1024 * 1024
 
@@ -712,9 +648,7 @@ def profile(request):
                     "Le CV ne doit pas dépasser 5 MB."
                 )
 
-                return redirect(
-                    "profile"
-                )
+                return redirect("profile")
 
             student.cv = cv_file
 
@@ -725,13 +659,9 @@ def profile(request):
             "Votre profil a été mis à jour avec succès."
         )
 
-        return redirect(
-            "profile"
-        )
+        return redirect("profile")
 
-    edit_mode = request.GET.get(
-        "edit"
-    ) == "1"
+    edit_mode = request.GET.get("edit") == "1"
 
     unread_notifications = Notification.objects.filter(
         user=request.user,
@@ -757,7 +687,6 @@ def profile(request):
 def student_dashboard(request):
 
     try:
-
         student = Student.objects.get(
             user=request.user
         )
@@ -765,14 +694,11 @@ def student_dashboard(request):
     except Student.DoesNotExist:
 
         try:
-
             Company.objects.get(
                 user=request.user
             )
 
-            return redirect(
-                "company_dashboard"
-            )
+            return redirect("company_dashboard")
 
         except Company.DoesNotExist:
 
@@ -781,18 +707,14 @@ def student_dashboard(request):
                 "Profil étudiant introuvable."
             )
 
-            return redirect(
-                "home"
-            )
+            return redirect("home")
 
     applications = Application.objects.filter(
         student=student
     ).select_related(
         "stage_offer",
         "stage_offer__company"
-    ).order_by(
-        "-created_at"
-    )
+    ).order_by("-created_at")
 
     total_applications = applications.count()
 
@@ -839,7 +761,6 @@ def student_dashboard(request):
 def company_dashboard(request):
 
     try:
-
         company = Company.objects.get(
             user=request.user
         )
@@ -851,27 +772,20 @@ def company_dashboard(request):
             "Compte entreprise introuvable."
         )
 
-        return redirect(
-            "student_dashboard"
-        )
+        return redirect("student_dashboard")
 
     offers = StageOffer.objects.filter(
         company=company
-    ).order_by(
-        "-created_at"
-    )
+    ).order_by("-created_at")
 
     applications = Application.objects.filter(
         stage_offer__company=company
     ).select_related(
         "student",
         "stage_offer"
-    ).order_by(
-        "-created_at"
-    )
+    ).order_by("-created_at")
 
     total_offers = offers.count()
-
     total_applications = applications.count()
 
     pending_applications = applications.filter(
@@ -917,65 +831,42 @@ def company_dashboard(request):
 
 @login_required(login_url="login_student")
 def add_offer(request):
+    if not request.user.is_authenticated:
+        return redirect("login_student")
 
     try:
-
-        company = Company.objects.get(
-            user=request.user
-        )
-
+        company = Company.objects.get(user=request.user)
     except Company.DoesNotExist:
-
         messages.error(
             request,
-            "Compte entreprise introuvable."
+            "Vous devez avoir un compte entreprise pour publier une offre."
         )
+        return redirect("home")
 
-        return redirect(
-            "student_dashboard"
+    if not company.is_verified:
+        messages.warning(
+            request,
+            "Votre entreprise doit être vérifiée par l'administration avant de publier une offre."
         )
+        return redirect("company_dashboard")
 
     if request.method == "POST":
-
-        title = request.POST.get(
-            "title",
-            ""
-        ).strip()
-
-        description = request.POST.get(
-            "description",
-            ""
-        ).strip()
-
-        location = request.POST.get(
-            "location",
-            ""
-        ).strip()
-
-        field = request.POST.get(
-            "field",
-            ""
-        ).strip()
-
-        duration = request.POST.get(
-            "duration",
-            ""
-        ).strip()
+        title = request.POST.get("title", "").strip()
+        description = request.POST.get("description", "").strip()
+        location = request.POST.get("location", "").strip()
+        field = request.POST.get("field", "").strip()
+        duration = request.POST.get("duration", "").strip()
 
         if not title or not description or not location or not field or not duration:
-
             messages.error(
                 request,
                 "Veuillez remplir tous les champs."
             )
-
-            return redirect(
-                "add_offer"
-            )
+            return redirect("add_offer")
 
         StageOffer.objects.create(
-            title=title,
             company=company,
+            title=title,
             description=description,
             location=location,
             field=field,
@@ -984,20 +875,17 @@ def add_offer(request):
 
         messages.success(
             request,
-            "L'offre a été créée avec succès."
+            "Votre offre de stage a été publiée avec succès."
         )
 
-        return redirect(
-            "company_dashboard"
-        )
+        return redirect("company_dashboard")
 
     return render(
         request,
-        "stages/add_offer.html",
-        {
-            "company": company
-        }
+        "stages/add_offer.html"
     )
+
+
 
 
 # =========================================================
@@ -1008,7 +896,6 @@ def add_offer(request):
 def company_applications(request):
 
     try:
-
         company = Company.objects.get(
             user=request.user
         )
@@ -1020,18 +907,14 @@ def company_applications(request):
             "Profil entreprise introuvable."
         )
 
-        return redirect(
-            "home"
-        )
+        return redirect("home")
 
     applications = Application.objects.filter(
         stage_offer__company=company
     ).select_related(
         "student",
         "stage_offer"
-    ).order_by(
-        "-created_at"
-    )
+    ).order_by("-created_at")
 
     pending_count = applications.filter(
         status="pending"
@@ -1087,9 +970,7 @@ def offer_applications(request, offer_id):
     ).select_related(
         "student",
         "stage_offer"
-    ).order_by(
-        "-created_at"
-    )
+    ).order_by("-created_at")
 
     status_filter = request.GET.get(
         "status",
@@ -1159,7 +1040,6 @@ def update_application_status(
 ):
 
     try:
-
         company = Company.objects.get(
             user=request.user
         )
@@ -1171,9 +1051,7 @@ def update_application_status(
             "Compte entreprise introuvable."
         )
 
-        return redirect(
-            "student_dashboard"
-        )
+        return redirect("student_dashboard")
 
     application = get_object_or_404(
         Application,
@@ -1183,9 +1061,7 @@ def update_application_status(
 
     if request.method == "POST":
 
-        status = request.POST.get(
-            "status"
-        )
+        status = request.POST.get("status")
 
         allowed_statuses = [
             "pending",
@@ -1200,12 +1076,9 @@ def update_application_status(
                 "Statut invalide."
             )
 
-            return redirect(
-                "company_applications"
-            )
+            return redirect("company_applications")
 
         application.status = status
-
         application.save()
 
         if status == "accepted":
@@ -1244,9 +1117,7 @@ def update_application_status(
             "Le statut de la candidature a été mis à jour."
         )
 
-    return redirect(
-        "company_applications"
-    )
+    return redirect("company_applications")
 
 
 # =========================================================
@@ -1258,9 +1129,7 @@ def notifications(request):
 
     user_notifications = Notification.objects.filter(
         user=request.user
-    ).order_by(
-        "-created_at"
-    )
+    ).order_by("-created_at")
 
     unread_notifications = user_notifications.filter(
         is_read=False
@@ -1290,9 +1159,7 @@ def mark_notifications_read(request):
         is_read=True
     )
 
-    return redirect(
-        "notifications"
-    )
+    return redirect("notifications")
 
 
 # =========================================================
@@ -1306,7 +1173,6 @@ def edit_offer(
 ):
 
     try:
-
         company = Company.objects.get(
             user=request.user
         )
@@ -1318,9 +1184,7 @@ def edit_offer(
             "Compte entreprise introuvable."
         )
 
-        return redirect(
-            "student_dashboard"
-        )
+        return redirect("student_dashboard")
 
     offer = get_object_or_404(
         StageOffer,
@@ -1362,9 +1226,7 @@ def edit_offer(
             "L'offre a été modifiée avec succès."
         )
 
-        return redirect(
-            "company_dashboard"
-        )
+        return redirect("company_dashboard")
 
     return render(
         request,
@@ -1387,7 +1249,6 @@ def delete_offer(
 ):
 
     try:
-
         company = Company.objects.get(
             user=request.user
         )
@@ -1399,9 +1260,7 @@ def delete_offer(
             "Compte entreprise introuvable."
         )
 
-        return redirect(
-            "student_dashboard"
-        )
+        return redirect("student_dashboard")
 
     offer = get_object_or_404(
         StageOffer,
@@ -1418,9 +1277,7 @@ def delete_offer(
             "L'offre a été supprimée avec succès."
         )
 
-    return redirect(
-        "company_dashboard"
-    )
+    return redirect("company_dashboard")
 
 
 # =========================================================
@@ -1431,7 +1288,6 @@ def delete_offer(
 def company_profile(request):
 
     try:
-
         company = Company.objects.get(
             user=request.user
         )
@@ -1443,9 +1299,7 @@ def company_profile(request):
             "Profil entreprise introuvable."
         )
 
-        return redirect(
-            "home"
-        )
+        return redirect("home")
 
     if request.method == "POST":
 
@@ -1476,9 +1330,7 @@ def company_profile(request):
                 "Veuillez remplir tous les champs obligatoires."
             )
 
-            return redirect(
-                "company_profile"
-            )
+            return redirect("company_profile")
 
         email_exists = Company.objects.filter(
             email=email
@@ -1493,9 +1345,7 @@ def company_profile(request):
                 "Cet email est déjà utilisé par une autre entreprise."
             )
 
-            return redirect(
-                "company_profile"
-            )
+            return redirect("company_profile")
 
         company.name = name
         company.email = email
@@ -1509,13 +1359,9 @@ def company_profile(request):
             "Le profil de votre entreprise a été mis à jour avec succès."
         )
 
-        return redirect(
-            "company_profile"
-        )
+        return redirect("company_profile")
 
-    edit_mode = request.GET.get(
-        "edit"
-    ) == "1"
+    edit_mode = request.GET.get("edit") == "1"
 
     unread_notifications = Notification.objects.filter(
         user=request.user,
