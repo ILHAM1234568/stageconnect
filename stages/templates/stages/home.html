@@ -7,377 +7,451 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StageConnect</title>
 
 ```
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
+<title>StageConnect — Trouvez votre stage</title>
 
-    body {
-        font-family: Arial, sans-serif;
-        background: #f5f7fb;
-        color: #1f2937;
-    }
-
-    .navbar {
-        background: white;
-        min-height: 70px;
-        padding: 0 6%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    }
-
-    .logo {
-        color: #2563eb;
-        text-decoration: none;
-        font-size: 25px;
-        font-weight: bold;
-    }
-
-    .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .nav-links a {
-        text-decoration: none;
-        color: #374151;
-        padding: 10px 14px;
-        border-radius: 9px;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .nav-links a:hover {
-        background: #eff6ff;
-        color: #2563eb;
-    }
-
-    .login {
-        background: #2563eb;
-        color: white !important;
-    }
-
-    .register {
-        background: #10b981;
-        color: white !important;
-    }
-
-    .logout {
-        background: #ef4444;
-        color: white !important;
-    }
-
-    .container {
-        width: 90%;
-        max-width: 1200px;
-        margin: 35px auto;
-    }
-
-    .welcome {
-        background: linear-gradient(135deg, #2563eb, #4f46e5);
-        color: white;
-        padding: 45px;
-        border-radius: 20px;
-        margin-bottom: 25px;
-    }
-
-    .welcome h1 {
-        font-size: 32px;
-        margin-bottom: 12px;
-    }
-
-    .welcome p {
-        font-size: 16px;
-    }
-
-    .search-box {
-        background: white;
-        padding: 22px;
-        border-radius: 16px;
-        margin-bottom: 30px;
-    }
-
-    .search-box form {
-        display: flex;
-        gap: 10px;
-    }
-
-    .search-box input {
-        flex: 1;
-        padding: 14px;
-        border: 1px solid #d1d5db;
-        border-radius: 10px;
-        font-size: 15px;
-    }
-
-    .search-box button {
-        padding: 14px 25px;
-        border: none;
-        border-radius: 10px;
-        background: #2563eb;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .section-title {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-
-    .offers {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 22px;
-    }
-
-    .offer-card {
-        background: white;
-        border-radius: 18px;
-        padding: 25px;
-        box-shadow: 0 4px 18px rgba(0,0,0,0.07);
-    }
-
-    .offer-card h3 {
-        color: #2563eb;
-        font-size: 20px;
-        margin-bottom: 12px;
-    }
-
-    .offer-card p {
-        color: #6b7280;
-        line-height: 1.6;
-        margin-bottom: 10px;
-    }
-
-    .details {
-        margin-top: 15px;
-    }
-
-    .details strong {
-        color: #111827;
-    }
-
-    .view-button {
-        display: inline-block;
-        margin-top: 18px;
-        padding: 11px 17px;
-        background: #2563eb;
-        color: white;
-        text-decoration: none;
-        border-radius: 9px;
-        font-weight: bold;
-    }
-
-    .empty {
-        background: white;
-        padding: 40px;
-        text-align: center;
-        border-radius: 16px;
-        color: #6b7280;
-    }
-
-    @media (max-width: 800px) {
-
-        .navbar {
-            padding: 15px 20px;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .nav-links {
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .offers {
-            grid-template-columns: 1fr;
-        }
-
-        .search-box form {
-            flex-direction: column;
-        }
-
-        .welcome {
-            padding: 30px;
-        }
-
-        .welcome h1 {
-            font-size: 26px;
-        }
-    }
-</style>
+<link rel="stylesheet" href="{% static 'stages/style.css' %}">
 ```
 
 </head>
 
-<body>
-
-<nav class="navbar">
+<body class="home-page">
 
 ```
-<a href="{% url 'home' %}" class="logo">
-    StageConnect
-</a>
+<!-- NAVBAR -->
+<nav class="home-navbar">
 
-<div class="nav-links">
+    <div class="home-container navbar-inner">
 
-    {% if user.is_authenticated %}
-
-        <a href="{% url 'home' %}">
-            Accueil
+        <a href="{% url 'home' %}" class="home-logo">
+            Stage<span>Connect</span>
         </a>
 
-        <a href="{% url 'profile' %}">
-            Mon profil
-        </a>
+        <div class="navbar-links">
 
-        <a href="{% url 'my_applications' %}">
-            Mes candidatures
-        </a>
+            {% if user.is_authenticated %}
 
-        <a href="{% url 'logout_student' %}" class="logout">
-            Déconnexion
-        </a>
+                <a href="{% url 'home' %}">
+                    Accueil
+                </a>
 
-    {% else %}
+                <a href="{% url 'profile' %}">
+                    Mon profil
+                </a>
 
-        <a href="{% url 'login_student' %}" class="login">
-            Connexion
-        </a>
+                <a href="{% url 'my_applications' %}">
+                    Mes candidatures
+                </a>
 
-        <a href="{% url 'register' %}" class="register">
-            Créer un compte
-        </a>
+                <a href="{% url 'notifications' %}" class="notification-link">
+                    🔔
+                </a>
 
-    {% endif %}
+                <a href="{% url 'logout_student' %}" class="navbar-button">
+                    Déconnexion
+                </a>
 
-</div>
-```
+            {% else %}
+
+                <a href="{% url 'login_student' %}">
+                    Connexion
+                </a>
+
+                <a href="{% url 'register' %}" class="navbar-button">
+                    Créer un compte
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
 
 </nav>
 
-<main class="container">
 
-```
-<section class="welcome">
+<!-- HERO -->
+<section class="home-hero">
 
-    <h1>
-        Trouvez votre stage avec StageConnect 🚀
-    </h1>
+    <div class="home-container hero-inner">
 
-    <p>
-        Découvrez des opportunités de stage et trouvez
-        l'entreprise qui correspond à votre parcours.
-    </p>
+        <div class="hero-content">
 
-</section>
+            <span class="hero-badge">
+                ✦ LA PLATEFORME DES STAGES
+            </span>
 
+            <h1>
+                Trouvez le stage
+                <br>
+                qui <span>vous correspond.</span>
+            </h1>
 
-<section class="search-box">
+            <p>
+                Découvrez des opportunités de stage,
+                explorez les entreprises et donnez un
+                nouvel élan à votre parcours professionnel.
+            </p>
 
-    <form method="GET">
-
-        <input
-            type="text"
-            name="search"
-            value="{{ search }}"
-            placeholder="Rechercher un stage, domaine ou ville..."
-        >
-
-        <button type="submit">
-            Rechercher
-        </button>
-
-    </form>
-
-</section>
-
-
-<h2 class="section-title">
-    Offres de stage
-</h2>
-
-
-{% if offers %}
-
-    <div class="offers">
-
-        {% for offer in offers %}
-
-            <div class="offer-card">
-
-                <h3>
-                    {{ offer.title }}
-                </h3>
-
-                <p>
-                    {{ offer.description }}
-                </p>
-
-                <div class="details">
-
-                    <p>
-                        <strong>Entreprise :</strong>
-                        {{ offer.company.name }}
-                    </p>
-
-                    <p>
-                        <strong>📍 Localisation :</strong>
-                        {{ offer.location }}
-                    </p>
-
-                    <p>
-                        <strong>🎓 Domaine :</strong>
-                        {{ offer.field }}
-                    </p>
-
-                    <p>
-                        <strong>⏱ Durée :</strong>
-                        {{ offer.duration }}
-                    </p>
-
-                </div>
+            <div class="hero-buttons">
 
                 <a
-                    href="{% url 'stage_detail' offer.id %}"
-                    class="view-button"
+                    href="#offres"
+                    class="hero-main-button"
                 >
-                    Voir l'offre →
+                    🔎 Explorer les stages
                 </a>
+
+                {% if not user.is_authenticated %}
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="hero-outline-button"
+                    >
+                        Créer un compte →
+                    </a>
+
+                {% endif %}
 
             </div>
 
-        {% endfor %}
+            <div class="hero-stats">
+
+                <div class="hero-stat">
+                    <strong>{{ offers|length }}</strong>
+                    <span>Offres disponibles</span>
+                </div>
+
+                <div class="hero-stat">
+                    <strong>100%</strong>
+                    <span>Gratuit</span>
+                </div>
+
+                <div class="hero-stat">
+                    <strong>🚀</strong>
+                    <span>Simple & rapide</span>
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
-{% else %}
+</section>
 
-    <div class="empty">
 
-        <h3>
-            Aucune offre de stage disponible
-        </h3>
+<!-- SEARCH -->
+<section class="home-search-section">
 
-        <p style="margin-top: 10px;">
-            Les nouvelles offres apparaîtront ici.
-        </p>
+    <div class="home-container">
+
+        <div class="home-search-card">
+
+            <div class="search-heading">
+
+                <div class="search-icon">
+                    🔎
+                </div>
+
+                <div>
+                    <h2>
+                        Trouvez votre prochaine opportunité
+                    </h2>
+
+                    <p>
+                        Recherchez par domaine, ville ou mot-clé.
+                    </p>
+                </div>
+
+            </div>
+
+            <form
+                method="GET"
+                class="home-search-form"
+            >
+
+                <div class="home-input-group">
+
+                    <span>⌕</span>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Ex : Python, informatique, Oujda..."
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="home-search-button"
+                >
+                    Rechercher
+                </button>
+
+            </form>
+
+        </div>
 
     </div>
 
-{% endif %}
-```
+</section>
+
+
+<!-- OFFERS -->
+<main
+    class="home-main"
+    id="offres"
+>
+
+    <div class="home-container">
+
+        <div class="offers-heading">
+
+            <div>
+
+                <span class="section-small-title">
+                    OPPORTUNITÉS
+                </span>
+
+                <h2>
+                    Offres de stage
+                </h2>
+
+            </div>
+
+            <span class="offers-number">
+                {{ offers|length }} offre{{ offers|length|pluralize }}
+            </span>
+
+        </div>
+
+
+        {% if offers %}
+
+            <div class="offers-grid">
+
+                {% for offer in offers %}
+
+                    <article class="offer-card">
+
+                        <div class="offer-card-top">
+
+                            <div class="company-avatar">
+                                {{ offer.company.name|first|upper }}
+                            </div>
+
+                            <div class="company-information">
+
+                                <strong>
+                                    {{ offer.company.name }}
+                                </strong>
+
+                                {% if offer.company.is_verified %}
+                                    <span>
+                                        ✓ Entreprise vérifiée
+                                    </span>
+                                {% else %}
+                                    <span>
+                                        Entreprise
+                                    </span>
+                                {% endif %}
+
+                            </div>
+
+                            <span class="offer-bookmark">
+                                ☆
+                            </span>
+
+                        </div>
+
+
+                        <div class="offer-card-body">
+
+                            <span class="offer-field">
+                                {{ offer.field }}
+                            </span>
+
+                            <h3>
+                                {{ offer.title }}
+                            </h3>
+
+                            <p class="offer-description">
+                                {{ offer.description|truncatewords:25 }}
+                            </p>
+
+
+                            <div class="offer-details">
+
+                                <span>
+                                    📍 {{ offer.location }}
+                                </span>
+
+                                <span>
+                                    ⏱ {{ offer.duration }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="offer-card-footer">
+
+                            <span>
+                                Stage
+                            </span>
+
+                            <a
+                                href="{% url 'stage_detail' offer.id %}"
+                                class="offer-button"
+                            >
+                                Voir l'offre
+                                <span>→</span>
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-offers">
+
+                <div>
+                    📭
+                </div>
+
+                <h3>
+                    Aucune offre de stage disponible
+                </h3>
+
+                <p>
+                    Les nouvelles opportunités apparaîtront ici
+                    dès qu'une entreprise publiera une offre.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
 
 </main>
+
+
+<!-- CTA -->
+<section class="home-cta">
+
+    <div class="home-container">
+
+        <div class="cta-card">
+
+            <div class="cta-content">
+
+                <span class="cta-small">
+                    ✨ VOTRE PROCHAINE ÉTAPE
+                </span>
+
+                <h2>
+                    Prêt à trouver votre stage ?
+                </h2>
+
+                <p>
+                    Créez votre compte et commencez dès maintenant
+                    à découvrir les opportunités qui vous correspondent.
+                </p>
+
+                {% if not user.is_authenticated %}
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="cta-button"
+                    >
+                        Commencer maintenant →
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="#offres"
+                        class="cta-button"
+                    >
+                        Explorer les offres →
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer class="home-footer">
+
+    <div class="home-container footer-inner">
+
+        <div class="footer-brand">
+
+            <strong>
+                Stage<span>Connect</span>
+            </strong>
+
+            <p>
+                La plateforme qui connecte les étudiants
+                aux opportunités de stage.
+            </p>
+
+        </div>
+
+        <div class="footer-links">
+
+            <a href="{% url 'home' %}">
+                Accueil
+            </a>
+
+            {% if not user.is_authenticated %}
+
+                <a href="{% url 'login_student' %}">
+                    Connexion
+                </a>
+
+                <a href="{% url 'register' %}">
+                    Inscription
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <div class="home-container footer-bottom">
+
+        <span>
+            © 2026 StageConnect
+        </span>
+
+        <span>
+            Trouvez. Postulez. Réussissez. 🚀
+        </span>
+
+    </div>
+
+</footer>
+```
 
 </body>
 </html>

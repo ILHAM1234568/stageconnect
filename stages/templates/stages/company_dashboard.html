@@ -764,42 +764,101 @@
 
     {% if offers %}
 
-        <div class="offers">
+<div class="offers">
 
-            {% for offer in offers %}
+    {% for offer in offers %}
 
-                <div class="offer">
+        <div class="offer">
 
-                    <h3>
-                        {{ offer.title }}
-                    </h3>
+            <h3>
+                {{ offer.title }}
+            </h3>
 
+            <p>
+                📍 {{ offer.location }}
+            </p>
 
-                    <p>
-                        📍 {{ offer.location }}
-                    </p>
+            <p>
+                🎓 {{ offer.field }}
+            </p>
 
+            <p>
+                ⏱️ {{ offer.duration }}
+            </p>
 
-                    <p>
-                        🎓 {{ offer.field }}
-                    </p>
+            <div class="offer-actions">
 
+                <a
+                    href="{% url 'edit_offer' offer.id %}"
+                    class="btn btn-secondary"
+                >
+                    ✏️ Modifier
+                </a>
 
-                    <p>
-                        ⏱️ {{ offer.duration }}
-                    </p>
+                <a
+                    href="{% url 'offer_applications' offer.id %}"
+                    class="btn btn-primary"
+                >
+                    👥 Candidatures
+                </a>
 
+                <a
+                    href="{% url 'delete_offer' offer.id %}"
+                    class="btn btn-danger"
+                >
+                    🗑️ Supprimer
+                </a>
 
-                    <div class="offer-actions">
+            </div>
 
-                        <a
-                            href="{% url 'edit_offer' offer.id %}"
-                            class="btn btn-secondary"
-                        >
-                            ✏️ Modifier
-                        </a>
+        </div>
 
+    {% endfor %}
 
-                        <a
-                            href="{% url 'offer_applications' offer.id %}"
-                            class="btn btn-primary"
+</div>
+```
+
+{% else %}
+
+```
+<div class="empty">
+
+    {% if company.is_verified %}
+
+        <h3>
+            📭 Aucune offre pour le moment
+        </h3>
+
+        <p style="margin: 12px 0 20px;">
+            Commencez par publier votre première offre de stage.
+        </p>
+
+        <a
+            href="{% url 'add_offer' %}"
+            class="btn btn-primary"
+        >
+            ➕ Ajouter une offre
+        </a>
+
+    {% else %}
+
+        <h3>
+            🔒 Publication bloquée
+        </h3>
+
+        <p style="margin: 12px 0;">
+            Votre entreprise doit être vérifiée
+            par l'administration avant de publier une offre.
+        </p>
+
+    {% endif %}
+
+</div>
+```
+
+{% endif %}
+
+</section>
+
+</body>
+</html>
